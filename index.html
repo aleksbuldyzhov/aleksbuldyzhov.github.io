@@ -110,7 +110,7 @@ body.em .cell{background:#cc2222!important}
 .cell:hover .cell-bg.flip-h { transform: scaleX(-1) scale(1.03) !important; }
 body.em .cell:hover .cell-bg.flip-h { transform: scaleX(-1) !important; }
 
-/* КАРТИНКА-ВРЕЗКА (ИНТЕРАКТИВНАЯ) */
+/* КАРТИНКА-ВРЕЗКА (ИНТЕРАКТИВНАЯ + УМНЫЙ ФЛИП РАМКИ) */
 .cell-inset {
     position: absolute;
     top: 0; right: 0;
@@ -124,12 +124,19 @@ body.em .cell:hover .cell-bg.flip-h { transform: scaleX(-1) !important; }
     box-shadow: -3px 3px 15px rgba(0,0,0,0.3);
     transition: all 0.25s ease-in-out;
 }
+.cell-inset.flip-inset {
+    transform: scaleX(-1) !important;
+    border-left: none !important;
+    border-right: 2px solid #fff !important;
+    box-shadow: 3px 3px 15px rgba(0,0,0,0.3) !important;
+}
+
 body:not(.em) .cell-inset { pointer-events: auto; }
 body:not(.em) .cell-inset:hover {
     height: 100% !important;
     max-width: 100% !important;
     width: 100% !important;
-    border-width: 0 !important;
+    border: none !important;
     box-shadow: none !important;
     z-index: 10 !important;
 }
@@ -165,8 +172,8 @@ body.em .ccap { opacity: 0 !important; }
 .fs-item{height:22px;width:auto;min-width:16px;max-width:55px;border-radius:2px;border:1.5px solid rgba(255,255,255,.6);flex-shrink:0;cursor:pointer;opacity:.55;object-fit:cover;transition:opacity .1s,border-color .1s;display:block}
 .fs-item:hover,.fs-item.act{opacity:1;border-color:#fff}
 
-/* EDIT CELL OVERLAY (ОБНОВЛЕННЫЙ) */
-.ceo{position:absolute;inset:0;background:rgba(0,0,0,.8);display:none;flex-direction:column;gap:4px;padding:8px 12px;z-index:10;overflow-y:auto}
+/* EDIT CELL OVERLAY (ОСВЕТЛЕН НА 40%) */
+.ceo{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;flex-direction:column;gap:4px;padding:8px 12px;z-index:10;overflow-y:auto}
 .ceo > * { flex-shrink: 0; } 
 body.em .ceo{display:flex}
 body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
@@ -174,11 +181,11 @@ body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
 .cin:focus{border-color:#00a0ff}
 .cin::placeholder{color:rgba(255,255,255,.4)}
 .eo-row{display:flex;align-items:center;gap:6px;margin-top:2px}
-.eo-label{font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap;}
+.eo-label{font-size:11px;color:rgba(255,255,255,.9);white-space:nowrap;font-weight:500;}
 .eo-check{accent-color:#00a0ff;width:13px;height:13px;}
 
 /* POS BAR COMPACT */
-.pos-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
+.pos-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
 .pos-bar-thumb{position:absolute;top:2px;bottom:2px;width:10px;background:#00a0ff;border-radius:2px;transform:translateX(-50%);transition:left .05s;pointer-events:none}
 
 .extra-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
@@ -189,17 +196,19 @@ body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
 .extra-del{position:absolute;top:-5px;right:-5px;background:#e00;color:#fff;border:none;border-radius:50%;width:14px;height:14px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
 .zoom-num{
-  width:40px; background:rgba(0,0,0,.7); border:1px solid rgba(255,255,255,.25); 
+  width:40px; background:rgba(0,0,0,.7); border:1px solid rgba(255,255,255,.3); 
   color:#fff; font-size:11px; padding:2px 4px; border-radius:3px; font-family:inherit; text-align:center;
   -moz-appearance: textfield; 
 }
 .zoom-num::-webkit-outer-spin-button, .zoom-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.zoom-lbl{font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap}
+.zoom-lbl{font-size:11px;color:rgba(255,255,255,.9);white-space:nowrap;font-weight:500;}
 
 /* КНОПКИ УПРАВЛЕНИЯ */
-.cclr{background:rgba(200,40,40,.75);color:#fff;border:none;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer;}
-.cdef{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer; transition:background .1s;}
-.cdef:hover{background:rgba(255,255,255,.3);}
+.cclr{background:rgba(200,40,40,.8);color:#fff;border:none;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer;}
+.cdef{background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer; transition:background .1s;}
+.cdef:hover{background:rgba(255,255,255,.2);}
+.pos-reset-btn{background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:3px;font-size:11px;padding:2px 6px;cursor:pointer;flex-shrink:0;line-height:1.2}
+.pos-reset-btn:hover{background:rgba(0,160,255,.6)}
 
 /* ADD ROW BUTTONS */
 #addbar{display:none;padding:12px 0;gap:8px;flex-wrap:wrap;align-items:center}
@@ -294,6 +303,10 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
       border-left: 2px solid #fff !important;
       border-bottom: 2px solid #fff !important;
       -webkit-print-color-adjust: exact !important;
+  }
+  .cell-inset.flip-inset {
+      border-left: none !important;
+      border-right: 2px solid #fff !important;
   }
   
   .cell-bg { display: none !important; }
@@ -716,7 +729,7 @@ function renderGrid(){
           var insetImg = document.createElement('img');
           insetImg.src = gdFull(cell.insetUrl); 
           insetImg.className = 'cell-inset';
-          if(cell.flipInset) insetImg.classList.add('flip-h');
+          if(cell.flipInset) insetImg.classList.add('flip-inset');
           bgWrap.appendChild(insetImg);
       }
       
@@ -870,7 +883,7 @@ function renderGrid(){
         ci2.placeholder='Подпись снизу...';ci2.value=cell.caption||'';
         ci2.onchange=function(){cell.caption=this.value;};
 
-        // --- ROW 1: ZOOM, X, Y ---
+        // --- ROW 1: ZOOM, X, Y, RESET ---
         var ctrlRow1 = document.createElement('div');
         ctrlRow1.className = 'eo-row';
         ctrlRow1.style.justifyContent = 'space-between';
@@ -887,6 +900,13 @@ function renderGrid(){
         var ylbl = document.createElement('span'); ylbl.className='zoom-lbl'; ylbl.textContent='Y:';
         var ywrap = document.createElement('div'); ywrap.className='pos-bar-wrap'; 
         var ythumb = document.createElement('div'); ythumb.className='pos-bar-thumb'; ywrap.appendChild(ythumb);
+
+        var pReset = document.createElement('button');
+        pReset.className = 'pos-reset-btn';
+        pReset.textContent = '⊙';
+        pReset.title = 'Сброс позиции по центру';
+        pReset.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+        pReset.onclick = function(e){ e.stopPropagation(); applyPos(50, 50); };
 
         function applyPos(px, py){
           if(px !== undefined) cell.posX=Math.min(100,Math.max(0,Math.round(px)));
@@ -939,7 +959,7 @@ function renderGrid(){
           var rect=ywrap.getBoundingClientRect();
           var startX=e.clientX,startPy=cell.posY!==undefined?cell.posY:50;
           function onMove(ev){
-            var dx=ev.clientX-startX; // Use X movement on horizontal bar for Y value
+            var dx=ev.clientX-startX;
             applyPos(cell.posX, startPy+(dx/rect.width*100));
           }
           function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
@@ -955,6 +975,7 @@ function renderGrid(){
         ctrlRow1.appendChild(zlbl); ctrlRow1.appendChild(znum);
         ctrlRow1.appendChild(xlbl); ctrlRow1.appendChild(xwrap);
         ctrlRow1.appendChild(ylbl); ctrlRow1.appendChild(ywrap);
+        ctrlRow1.appendChild(pReset);
 
         // --- ROW 2: EXTRAS ---
         var ctrlRow2 = document.createElement('div');
@@ -1108,7 +1129,7 @@ function renderGrid(){
             btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
             var inImg = bgWrap.querySelector('.cell-inset');
             if(inImg) {
-                if(cell.flipInset) inImg.classList.add('flip-h'); else inImg.classList.remove('flip-h');
+                if(cell.flipInset) inImg.classList.add('flip-inset'); else inImg.classList.remove('flip-inset');
             }
         };
 
