@@ -8,10 +8,9 @@
 <meta name="description" content="">
 <title>Portfolio Aleksandr Buldyzhov</title>
 <script type="text/javascript">
+/* Microsoft Clarity (Тепловые карты и записи экранов - оставляем) */
 (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","y68zizkq9o");
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RYJHBRTT6P"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RYJHBRTT6P');</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100vh;font-family:system-ui,sans-serif;background:#fff;color:#1a1a1a}
@@ -42,7 +41,7 @@ html,body{min-height:100vh;font-family:system-ui,sans-serif;background:#fff;colo
 .layout{max-width:1400px;margin:0 auto;padding:0 40px 0 80px}
 
 /* HEADER */
-header{padding:22px 0 18px} /* УБРАЛИ ПОЛОСКУ СНИЗУ */
+header{padding:22px 0 18px} 
 .hrow{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .hright{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:2px}
 .hcontacts{font-size:14px;color:#888;line-height:1.4}
@@ -258,6 +257,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
+
 </style>
 </head>
 <body>
@@ -278,11 +278,12 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
     <button class="ebtn eexit" onclick="exitEdit()">✕ Выйти</button>
   </div>
   <div class="etb-row">
-    <span class="el">Email</span><input class="ei" id="eemail" style="width:170px">
-    <span class="el">LinkedIn</span><input class="ei" id="eli" style="width:185px">
-    <span class="el">ArtStation</span><input class="ei" id="eas" style="width:185px">
-    <span class="el">Telegram</span><input class="ei" id="etg" style="width:155px" placeholder="https://t.me/...">
-    <span class="el">PDF URL</span><input class="ei" id="ecv" style="width:185px" placeholder="Ссылка на PDF...">
+    <span class="el">Email</span><input class="ei" id="eemail" style="width:160px">
+    <span class="el">LinkedIn</span><input class="ei" id="eli" style="width:165px">
+    <span class="el">ArtStation</span><input class="ei" id="eas" style="width:165px">
+    <span class="el">Telegram</span><input class="ei" id="etg" style="width:140px" placeholder="https://t.me/...">
+    <span class="el">PDF URL</span><input class="ei" id="ecv" style="width:165px" placeholder="Ссылка на PDF...">
+    <span class="el">GA ID</span><input class="ei" id="ega" style="width:125px" placeholder="G-XXXXXXX">
     <div class="esp"></div>
   </div>
 </div>
@@ -349,7 +350,9 @@ var S = {
   name:'Aleksandr Buldyzhov', line1:'3D Artist · Hard Surface & Vehicles',
   line2:'Wargaming · Belgrade, Serbia', line3:'',
   email:'sannf4@gmail.com',
-  liUrl:'', asUrl:'', tgUrl:'', cvUrl:'', rows:[]
+  liUrl:'', asUrl:'', tgUrl:'', cvUrl:'', gaId:'',
+  divTextColor:'#888888', divLineColor:'#e0e0e0',
+  rows:[]
 };
 
 var RC = {
@@ -380,7 +383,12 @@ function gdFull(url){
 function apiLoad(){
   return fetch('https://api.jsonbin.io/v3/b/'+BIN_ID+'/latest',{headers:{'X-Master-Key':API_KEY}})
     .then(function(r){return r.json();})
-    .then(function(d){if(d&&d.record&&d.record.rows!==undefined){S=d.record;localStorage.setItem('mf_cache',JSON.stringify(S));}})
+    .then(function(d){
+        if(d&&d.record&&d.record.rows!==undefined){
+            S=Object.assign(S, d.record); 
+            localStorage.setItem('mf_cache',JSON.stringify(S));
+        }
+    })
     .catch(function(){});
 }
 function apiSave(){
@@ -395,6 +403,21 @@ function flash(msg,err){
   var f=document.getElementById('efl');f.textContent=msg;
   f.className='efl'+(err?' err':' on');
   if(!err)setTimeout(function(){f.className='efl';},2000);
+}
+
+/* Google Analytics Injector */
+var gaInit = false;
+function initGA() {
+  if(gaInit || !S.gaId) return;
+  gaInit = true;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + S.gaId;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', S.gaId);
 }
 
 /* HEADER */
@@ -633,8 +656,6 @@ function renderGrid(){
           } else {
               newRow.divText = row.divText || '';
               newRow.divZoom = row.divZoom || 100;
-              newRow.textColor = row.textColor || '#888888';
-              newRow.lineColor = row.lineColor || '#e0e0e0';
               newRow.textBold = row.textBold || false;
           }
           var idx = S.rows.findIndex(function(r){return r.id===row.id;});
@@ -658,9 +679,11 @@ function renderGrid(){
         
         var dt = row.divText || '';
         var dz = row.divZoom || 100;
-        var dTextColor = row.textColor || '#888888';
-        var dLineColor = row.lineColor || '#e0e0e0';
         var dBold = row.textBold || false;
+        
+        // БЕРЕМ ГЛОБАЛЬНЫЕ ЦВЕТА ИЗ S
+        var dTextColor = S.divTextColor || '#888888';
+        var dLineColor = S.divLineColor || '#e0e0e0';
         
         dwrap.style.setProperty('--line-color', dLineColor);
         
@@ -708,12 +731,12 @@ function renderGrid(){
             var tcLbl = document.createElement('span'); tcLbl.className='eo-label'; tcLbl.textContent='Текст:';
             var tcInp = document.createElement('input'); tcInp.type='color'; tcInp.className='color-picker';
             tcInp.value = dTextColor;
-            tcInp.onchange = function() { row.textColor = this.value; renderGrid(); };
+            tcInp.onchange = function() { S.divTextColor = this.value; renderGrid(); }; // Меняем глобально!
             
             var lcLbl = document.createElement('span'); lcLbl.className='eo-label'; lcLbl.textContent='Линия:';
             var lcInp = document.createElement('input'); lcInp.type='color'; lcInp.className='color-picker';
             lcInp.value = dLineColor;
-            lcInp.onchange = function() { row.lineColor = this.value; renderGrid(); };
+            lcInp.onchange = function() { S.divLineColor = this.value; renderGrid(); }; // Меняем глобально!
 
             editPanel.appendChild(dInp);
             editPanel.appendChild(zlbl);
@@ -1353,6 +1376,7 @@ function fillEditor(){
   document.getElementById('eas').value=S.asUrl||'';
   document.getElementById('etg').value=S.tgUrl||'';
   document.getElementById('ecv').value=S.cvUrl||'';
+  document.getElementById('ega').value=S.gaId||'';
 }
 function saveAll(){
   S.name=document.getElementById('ename').value;
@@ -1364,16 +1388,18 @@ function saveAll(){
   S.asUrl=document.getElementById('eas').value;
   S.tgUrl=document.getElementById('etg').value;
   S.cvUrl=document.getElementById('ecv').value;
+  S.gaId=document.getElementById('ega').value.trim();
   renderHeader();flash('Сохраняю...',false);apiSave();
 }
 function exitEdit(){saveAll();setTimeout(function(){location.href=location.pathname;},800);}
 
 /* INIT */
 (function(){
-  try{var c=localStorage.getItem('mf_cache');if(c){S=JSON.parse(c);renderHeader();renderGrid();}}catch(e){}
+  try{var c=localStorage.getItem('mf_cache');if(c){S=JSON.parse(c);renderHeader();renderGrid(); initGA();}}catch(e){}
   apiLoad().then(function(){
     document.getElementById('loading').style.display='none';
     renderHeader();renderGrid();
+    initGA();
     if(IS_EDIT){
       document.getElementById('etb').style.display='flex';
       document.body.classList.add('em');
