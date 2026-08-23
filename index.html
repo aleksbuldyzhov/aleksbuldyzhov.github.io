@@ -6,7 +6,6 @@
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <meta name="googlebot" content="noindex,nofollow">
 <meta name="description" content="">
-<!-- Заголовок для сохранения PDF -->
 <title>Portfolio Aleksandr Buldyzhov</title>
 <script type="text/javascript">
 (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","y68zizkq9o");
@@ -43,16 +42,16 @@ html,body{min-height:100vh;font-family:system-ui,sans-serif;background:#fff;colo
 .layout{max-width:1400px;margin:0 auto;padding:0 40px 0 80px}
 
 /* HEADER */
-header{border-bottom:1px solid #eee;padding:22px 0 18px}
+header{padding:22px 0 18px} /* УБРАЛИ ПОЛОСКУ СНИЗУ */
 .hrow{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .hright{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:2px}
 .hcontacts{font-size:14px;color:#888;line-height:1.4}
 .hname{font-size:34px;font-weight:700;line-height:1.1;margin-bottom:6px}
 .hline{font-size:14px;color:#888;margin-top:4px;line-height:1.4}
 .hlinks{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.hlinks a,.hlinks button{font-size:14px;color:#666;text-decoration:none;background:none;border:none;cursor:pointer}
+.hlinks a,.hlinks button{font-size:14px;color:#666;text-decoration:none;background:none;border:none;cursor:pointer; display:inline-block}
 .hlinks a:hover,.hlinks button:hover{color:#1a1a1a}
-.hcv,.hpdf{padding:6px 14px;border:1px solid #ddd!important;border-radius:5px;color:#555!important;font-size:13px!important}
+.hpdf{padding:6px 14px;border:1px solid #ddd!important;border-radius:5px;color:#555!important;font-size:13px!important}
 
 /* GRID AREA */
 #rows-wrap{display:flex;flex-direction:column;gap:6px;padding:12px 0 32px}
@@ -80,12 +79,12 @@ body.em .resize-handle{display:flex}
 .resize-handle:hover .resize-bar,.resize-handle.active .resize-bar{background:#00a0ff}
 
 /* РАЗДЕЛИТЕЛЬ */
-.div-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-.div-wrap::before, .div-wrap::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+.div-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; --line-color: #e0e0e0; }
+.div-wrap::before, .div-wrap::after { content: ''; flex: 1; height: 1px; background: var(--line-color); }
 .div-text { padding: 0 24px; font-weight: 400; letter-spacing: 3px; color: #888; text-transform: uppercase; white-space: nowrap; font-family: inherit; }
 .div-text:empty { padding: 0; }
 body.em .div-wrap { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #ffffff 10px, #ffffff 20px); border: 1px dashed #ddd; border-radius: 4px; }
-.div-edit-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.75); padding: 8px 14px; border-radius: 6px; display: flex; align-items: center; gap: 8px; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.div-edit-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 8px 14px; border-radius: 6px; display: flex; align-items: center; gap: 10px; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-wrap: wrap; justify-content: center; }
 
 /* 12-КОЛОНОЧНАЯ СЕТКА */
 .rg{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
@@ -192,6 +191,9 @@ body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
 .eo-row{display:flex;align-items:center;gap:6px;margin-top:2px}
 .eo-label{font-size:11px;color:rgba(255,255,255,.9);white-space:nowrap;font-weight:500; cursor: pointer;}
 .eo-check{accent-color:#00a0ff;width:13px;height:13px; cursor: pointer;}
+.color-picker { width: 22px; height: 22px; padding: 0; border: none; cursor: pointer; border-radius: 3px; background: none; }
+.color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+.color-picker::-webkit-color-swatch { border: 1px solid rgba(255,255,255,.3); border-radius: 3px; }
 
 /* POS BAR COMPACT */
 .pos-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
@@ -256,75 +258,6 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
-
-/* ═════ ПЕЧАТНАЯ ВЕРСИЯ ═════ */
-@media print{
-  @page { margin: 0; size: A4 landscape; }
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-
-  body { background:#fff!important; margin: 0 !important; padding: 0 !important; }
-  
-  .layout { padding: 10mm 15mm 0 15mm !important; max-width: 100% !important; width: 100% !important; margin: 0 auto !important; }
-  header { padding: 8mm 0 6mm !important; border-bottom: 1px solid #ddd; margin-bottom: 6px; }
-
-  a[href]::after { content: none !important; }
-  a { text-decoration: none !important; color: inherit !important; }
-
-  #etb, #addbar, .rctrl, .resize-handle, #loading, #lb, #nda-toast, .ceo, .div-edit-panel,
-  .filmstrip, .cnt-badge, .hcv, .hpdf, footer, #lb-scroll-track,
-  .hlinks { display: none !important; }
-
-  .hright { align-items: flex-end; }
-  .hcontacts { font-size: 11pt; color: #444; }
-
-  .rw { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6px !important; display: block !important; }
-  #rows-wrap { padding: 4px 0; gap: 6px; display: block !important; }
-  .rg { gap: 6px !important; display: flex !important; flex-wrap: nowrap !important; height: 100% !important; }
-  
-  .div-wrap { background: transparent !important; border: none !important; }
-  
-  .cell { position: relative !important; height: 100% !important; overflow: hidden !important; flex-shrink: 0 !important; background: transparent !important; border: 1px solid #e0e0e0 !important; }
-  
-  .c-3  { width: calc(25% - 4.5px) !important; }
-  .c-4  { width: calc(33.333% - 4px) !important; }
-  .c-6  { width: calc(50% - 3px) !important; }
-  .c-9  { width: calc(75% - 1.5px) !important; }
-  .c-12 { width: 100% !important; }
-  
-  .cell-text-block { position: absolute !important; inset: 0 !important; background: #fff !important; color: #111 !important; padding: 16px !important; font-size: 12pt !important; }
-
-  .cell-print-img { display: none !important; }
-  .cell-bg { display: block !important; }
-  
-  .cell-inset {
-      display: block !important;
-      position: absolute !important;
-      top: 0 !important;
-      right: 0 !important;
-      height: 42% !important;
-      width: auto !important;
-      max-width: 45% !important;
-      z-index: 5 !important;
-      border-left: 2px solid #fff !important;
-      border-bottom: 2px solid #fff !important;
-      -webkit-print-color-adjust: exact !important;
-  }
-  .cell-inset.flip-inset { border-left: none !important; border-right: 2px solid #fff !important; }
-  
-  .ccap { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
-  .ccap:not(.always-on) { opacity: 0 !important; }
-  .ccap.always-on { opacity: 1 !important; }
-  
-  .fill-ok, .cnt-badge { display: none !important; }
-
-  #print-footer {
-    display: block !important;
-    position: fixed; bottom: 0; left: 0; right: 0;
-    font-size: 9pt; color: #888; text-align: left;
-    border-top: 0.5pt solid #eee; padding: 4mm 16mm;
-    background: #fff;
-  }
-}
 </style>
 </head>
 <body>
@@ -349,9 +282,8 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
     <span class="el">LinkedIn</span><input class="ei" id="eli" style="width:185px">
     <span class="el">ArtStation</span><input class="ei" id="eas" style="width:185px">
     <span class="el">Telegram</span><input class="ei" id="etg" style="width:155px" placeholder="https://t.me/...">
-    <span class="el">CV URL</span><input class="ei" id="ecv" style="width:185px" placeholder="Google Drive...">
+    <span class="el">PDF URL</span><input class="ei" id="ecv" style="width:185px" placeholder="Ссылка на PDF...">
     <div class="esp"></div>
-    <button class="ebtn" style="background:#2a2a2a;color:#888" onclick="dlPDF()">↓ Portfolio PDF</button>
   </div>
 </div>
 
@@ -405,11 +337,6 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 </div>
 
 <div id="nda-toast">🔒 NDA — материалы защищены</div>
-
-<!-- PDF footer -->
-<div id="print-footer" style="display:none">
-  <span id="pf-name"></span> e-mail: <span id="pf-email"></span>
-</div>
 
 <script>
 /* ══ CONFIG ══ */
@@ -491,10 +418,15 @@ function renderHeader(){
   }
   lnk(S.liUrl,'LinkedIn');
   lnk(S.asUrl,'ArtStation');
-  if(S.cvUrl)lnk(gd(S.cvUrl),'↓ CV','hcv');
-  if(!IS_EDIT){
-    var pb=document.createElement('button');pb.className='hpdf';
-    pb.textContent='↓ Portfolio PDF';pb.onclick=dlPDF;hl.appendChild(pb);
+  
+  // КНОПКА СКАЧИВАНИЯ PDF
+  if(S.cvUrl) {
+      var pb=document.createElement('a');
+      pb.className='hpdf';
+      pb.textContent='↓ Portfolio PDF';
+      pb.href=S.cvUrl;
+      pb.target='_blank';
+      hl.appendChild(pb);
   }
 
   var hc=document.getElementById('hcontacts');
@@ -508,9 +440,6 @@ function renderHeader(){
     }
     hc.textContent = ct.join(' · ');
   }
-
-  var pn=document.getElementById('pf-name');if(pn)pn.textContent=S.name||'';
-  var pe=document.getElementById('pf-email');if(pe)pe.textContent=S.email||'';
 }
 
 /* DRAG & DROP ROWS */
@@ -704,6 +633,9 @@ function renderGrid(){
           } else {
               newRow.divText = row.divText || '';
               newRow.divZoom = row.divZoom || 100;
+              newRow.textColor = row.textColor || '#888888';
+              newRow.lineColor = row.lineColor || '#e0e0e0';
+              newRow.textBold = row.textBold || false;
           }
           var idx = S.rows.findIndex(function(r){return r.id===row.id;});
           S.rows.splice(idx+1, 0, newRow);
@@ -726,11 +658,18 @@ function renderGrid(){
         
         var dt = row.divText || '';
         var dz = row.divZoom || 100;
+        var dTextColor = row.textColor || '#888888';
+        var dLineColor = row.lineColor || '#e0e0e0';
+        var dBold = row.textBold || false;
+        
+        dwrap.style.setProperty('--line-color', dLineColor);
         
         var dtext = document.createElement('div');
         dtext.className = 'div-text';
         dtext.textContent = dt;
         dtext.style.fontSize = (12 * (dz / 100)) + 'px';
+        dtext.style.color = dTextColor;
+        dtext.style.fontWeight = dBold ? '700' : '400';
         
         dwrap.appendChild(dtext);
 
@@ -740,37 +679,50 @@ function renderGrid(){
             
             var dInp = document.createElement('input');
             dInp.className = 'cin';
-            dInp.style.width = '240px';
-            dInp.placeholder = 'Текст (оставь пустым для линии)';
+            dInp.style.width = '200px';
+            dInp.placeholder = 'Текст (пусто = линия)';
             dInp.value = dt;
             dInp.onchange = function(){ row.divText = this.value; renderGrid(); };
             
-            var zlbl = document.createElement('span');
-            zlbl.className = 'zoom-lbl';
-            zlbl.textContent = 'Размер:';
-            
-            var dZoom = document.createElement('input');
-            dZoom.type = 'number';
-            dZoom.className = 'zoom-num';
-            dZoom.min = 50; dZoom.max = 500;
-            dZoom.value = dz;
+            var zlbl = document.createElement('span'); zlbl.className = 'zoom-lbl'; zlbl.textContent = 'Размер:';
+            var dZoom = document.createElement('input'); dZoom.type = 'number'; dZoom.className = 'zoom-num';
+            dZoom.min = 50; dZoom.max = 500; dZoom.value = dz;
             
             function applyDZoom(val) {
                 row.divZoom = Math.min(500, Math.max(50, parseInt(val)||100));
                 dZoom.value = row.divZoom;
                 dtext.style.fontSize = (12 * (row.divZoom / 100)) + 'px';
             }
-            
             dZoom.addEventListener('change', function(){ applyDZoom(this.value); });
             dZoom.addEventListener('input', function(){ applyDZoom(this.value); });
             dZoom.addEventListener('wheel', function(e){
-                e.preventDefault();
-                applyDZoom((row.divZoom||100) + (e.deltaY<0 ? 5 : -5));
+                e.preventDefault(); applyDZoom((row.divZoom||100) + (e.deltaY<0 ? 5 : -5));
             }, {passive:false});
             
+            var boldLbl = document.createElement('label'); boldLbl.className='eo-label'; boldLbl.style.display='flex'; boldLbl.style.alignItems='center'; boldLbl.style.gap='4px';
+            var boldChk = document.createElement('input'); boldChk.type='checkbox'; boldChk.className='eo-check';
+            boldChk.checked = dBold;
+            boldChk.onchange = function() { row.textBold = this.checked; renderGrid(); };
+            boldLbl.appendChild(boldChk); boldLbl.appendChild(document.createTextNode('Жирный'));
+            
+            var tcLbl = document.createElement('span'); tcLbl.className='eo-label'; tcLbl.textContent='Текст:';
+            var tcInp = document.createElement('input'); tcInp.type='color'; tcInp.className='color-picker';
+            tcInp.value = dTextColor;
+            tcInp.onchange = function() { row.textColor = this.value; renderGrid(); };
+            
+            var lcLbl = document.createElement('span'); lcLbl.className='eo-label'; lcLbl.textContent='Линия:';
+            var lcInp = document.createElement('input'); lcInp.type='color'; lcInp.className='color-picker';
+            lcInp.value = dLineColor;
+            lcInp.onchange = function() { row.lineColor = this.value; renderGrid(); };
+
             editPanel.appendChild(dInp);
             editPanel.appendChild(zlbl);
             editPanel.appendChild(dZoom);
+            editPanel.appendChild(boldLbl);
+            editPanel.appendChild(tcLbl);
+            editPanel.appendChild(tcInp);
+            editPanel.appendChild(lcLbl);
+            editPanel.appendChild(lcInp);
             
             dwrap.appendChild(editPanel);
         }
@@ -783,7 +735,6 @@ function renderGrid(){
           var div=document.createElement('div');div.className='cell '+sc(span);
           
           var webUrl=gd((cell.url||'').trim());
-          var printUrl=gdFull((cell.url||'').trim());
           var inUrl=gdFull((cell.insetUrl||'').trim());
           
           var bgWrap = document.createElement('div');
@@ -799,8 +750,6 @@ function renderGrid(){
           
           if(webUrl) {
             bg.style.backgroundImage='url('+webUrl+')';
-            bg.setAttribute('data-web', webUrl);
-            bg.setAttribute('data-print', printUrl);
           }
           bgWrap.appendChild(bg);
           
@@ -809,8 +758,6 @@ function renderGrid(){
               var insetImg = document.createElement('img');
               insetImg.src = inUrl; 
               insetImg.className = 'cell-inset';
-              insetImg.setAttribute('data-web', inUrl);
-              insetImg.setAttribute('data-print', inUrl);
               if(cell.flipInset) insetImg.classList.add('flip-inset');
               insetImg.onerror = function(){ this.style.display='none'; };
               bgWrap.appendChild(insetImg);
@@ -1244,28 +1191,6 @@ function renderGrid(){
   });
 }
 
-/* МАГИЯ ПЕЧАТИ 4K (Подмена URL перед Ctrl+P) */
-window.addEventListener('beforeprint', function() {
-    document.querySelectorAll('.cell-bg').forEach(function(el){
-        var p = el.getAttribute('data-print');
-        if(p) el.style.backgroundImage = "url('"+p+"')";
-    });
-    document.querySelectorAll('.cell-inset').forEach(function(el){
-        var p = el.getAttribute('data-print');
-        if(p) el.src = p;
-    });
-});
-window.addEventListener('afterprint', function() {
-    document.querySelectorAll('.cell-bg').forEach(function(el){
-        var w = el.getAttribute('data-web');
-        if(w) el.style.backgroundImage = "url('"+w+"')";
-    });
-    document.querySelectorAll('.cell-inset').forEach(function(el){
-        var w = el.getAttribute('data-web');
-        if(w) el.src = w;
-    });
-});
-
 /* LIGHTBOX */
 var lbCur=0;
 function openLB(idx){
@@ -1370,7 +1295,6 @@ function showToast(){
   window.addEventListener('keyup',blockSave,true);
   document.addEventListener('keydown',blockSave,true);
   window.onkeydown=blockSave;
-  window.onbeforeprint=function(){return false;};
 })();
 
 var NDA_SRC='';
@@ -1408,12 +1332,6 @@ try {
     lbScroll.scrollLeft=scrollLeft-(x-startX);
   });
 })();
-
-function dlPDF(){
-  if(!confirm('⚠️ PDF Export\n\nGenerate PDF Portfolio?'))return;
-  gtag('event','pdf_download',{event_category:'portfolio'});
-  window.print();
-}
 
 /* EDITOR */
 function addRow(type){
