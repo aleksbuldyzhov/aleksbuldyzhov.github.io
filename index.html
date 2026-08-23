@@ -80,9 +80,12 @@ body.em .resize-handle{display:flex}
 .resize-handle:hover .resize-bar,.resize-handle.active .resize-bar{background:#00a0ff}
 
 /* РАЗДЕЛИТЕЛЬ */
-.div-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; }
-.div-line { width: 100%; height: 1px; background: #e0e0e0; }
+.div-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.div-wrap::before, .div-wrap::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+.div-text { padding: 0 24px; font-weight: 400; letter-spacing: 3px; color: #888; text-transform: uppercase; white-space: nowrap; font-family: inherit; }
+.div-text:empty { padding: 0; }
 body.em .div-wrap { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #ffffff 10px, #ffffff 20px); border: 1px dashed #ddd; border-radius: 4px; }
+.div-edit-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.75); padding: 8px 14px; border-radius: 6px; display: flex; align-items: center; gap: 8px; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
 /* 12-КОЛОНОЧНАЯ СЕТКА */
 .rg{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
@@ -110,12 +113,12 @@ body.em .cell:hover .cell-bg{transform:none}
 body.em .cell{background:#cc2222!important}
 .fill-ok{display:inline-flex;align-items:center;gap:3px;background:rgba(0,180,0,.85);color:#fff;font-size:10px;padding:2px 7px;border-radius:3px;pointer-events:none;white-space:nowrap}
 
-/* КЛАСС ДЛЯ ФЛИПА (Отзеркаливания) */
+/* КЛАСС ДЛЯ ФЛИПА */
 .flip-h { transform: scaleX(-1) !important; }
 .cell:hover .cell-bg.flip-h { transform: scaleX(-1) scale(1.03) !important; }
 body.em .cell:hover .cell-bg.flip-h { transform: scaleX(-1) !important; }
 
-/* КАРТИНКА-ВРЕЗКА (ИНТЕРАКТИВНАЯ + УМНЫЙ ФЛИП РАМКИ) */
+/* КАРТИНКА-ВРЕЗКА */
 .cell-inset {
     position: absolute;
     top: 0; right: 0;
@@ -152,7 +155,7 @@ body.em .cell-inset { pointer-events: none; opacity: 0.8; }
 
 .cno{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:12px}
 
-/* ПОДПИСИ (ТЕМНЫЙ ГРАДИЕНТ) */
+/* ПОДПИСИ */
 .ccap {
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -178,7 +181,7 @@ body.em .ccap { opacity: 0 !important; }
 .fs-item{height:22px;width:auto;min-width:16px;max-width:55px;border-radius:2px;border:1.5px solid rgba(255,255,255,.6);flex-shrink:0;cursor:pointer;opacity:.55;object-fit:cover;transition:opacity .1s,border-color .1s;display:block}
 .fs-item:hover,.fs-item.act{opacity:1;border-color:#fff}
 
-/* EDIT CELL OVERLAY (ОСВЕТЛЕН НА 40%) */
+/* EDIT CELL OVERLAY */
 .ceo{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;flex-direction:column;gap:4px;padding:8px 12px;z-index:10;overflow-y:auto}
 .ceo > * { flex-shrink: 0; } 
 body.em .ceo{display:flex}
@@ -254,7 +257,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
 
-/* ═════ ПЕЧАТНАЯ ВЕРСИЯ (ИДЕАЛЬНЫЙ 1:1 МАСШТАБ С WEB) ═════ */
+/* ═════ ПЕЧАТНАЯ ВЕРСИЯ ═════ */
 @media print{
   @page { margin: 0; size: A4 landscape; }
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -267,7 +270,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   a[href]::after { content: none !important; }
   a { text-decoration: none !important; color: inherit !important; }
 
-  #etb, #addbar, .rctrl, .resize-handle, #loading, #lb, #nda-toast, .ceo,
+  #etb, #addbar, .rctrl, .resize-handle, #loading, #lb, #nda-toast, .ceo, .div-edit-panel,
   .filmstrip, .cnt-badge, .hcv, .hpdf, footer, #lb-scroll-track,
   .hlinks { display: none !important; }
 
@@ -290,13 +293,9 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   
   .cell-text-block { position: absolute !important; inset: 0 !important; background: #fff !important; color: #111 !important; padding: 16px !important; font-size: 12pt !important; }
 
-  /* Полностью вырезаем кривой математический img-принтер */
   .cell-print-img { display: none !important; }
-  
-  /* ИСПОЛЬЗУЕМ В ПЕЧАТИ ТОТ ЖЕ ФОН, ЧТО НА ЭКРАНЕ (Требуется галочка Фоновая Графика) */
   .cell-bg { display: block !important; }
   
-  /* Врезка в PDF (статичная, без анимации) */
   .cell-inset {
       display: block !important;
       position: absolute !important;
@@ -310,13 +309,9 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
       border-bottom: 2px solid #fff !important;
       -webkit-print-color-adjust: exact !important;
   }
-  .cell-inset.flip-inset {
-      border-left: none !important;
-      border-right: 2px solid #fff !important;
-  }
+  .cell-inset.flip-inset { border-left: none !important; border-right: 2px solid #fff !important; }
   
   .ccap { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
-  /* Показывать подпись в PDF только если стоит галочка 'Всегда видима' */
   .ccap:not(.always-on) { opacity: 0 !important; }
   .ccap.always-on { opacity: 1 !important; }
   
@@ -411,7 +406,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 
 <div id="nda-toast">🔒 NDA — материалы защищены</div>
 
-<!-- PDF footer (Strict layout) -->
+<!-- PDF footer -->
 <div id="print-footer" style="display:none">
   <span id="pf-name"></span> e-mail: <span id="pf-email"></span>
 </div>
@@ -706,6 +701,9 @@ function renderGrid(){
           var newRow = { id: 'r'+Date.now(), type: row.type, rowH: row.rowH, cells: [] };
           if(!isDiv){
               for(var i=0; i<cfg.cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false, capAlways:false});
+          } else {
+              newRow.divText = row.divText || '';
+              newRow.divZoom = row.divZoom || 100;
           }
           var idx = S.rows.findIndex(function(r){return r.id===row.id;});
           S.rows.splice(idx+1, 0, newRow);
@@ -725,9 +723,58 @@ function renderGrid(){
     if(isDiv) {
         var dwrap = document.createElement('div');
         dwrap.className = 'div-wrap';
-        var dline = document.createElement('div');
-        dline.className = 'div-line';
-        dwrap.appendChild(dline);
+        
+        var dt = row.divText || '';
+        var dz = row.divZoom || 100;
+        
+        var dtext = document.createElement('div');
+        dtext.className = 'div-text';
+        dtext.textContent = dt;
+        dtext.style.fontSize = (12 * (dz / 100)) + 'px';
+        
+        dwrap.appendChild(dtext);
+
+        if(IS_EDIT) {
+            var editPanel = document.createElement('div');
+            editPanel.className = 'div-edit-panel';
+            
+            var dInp = document.createElement('input');
+            dInp.className = 'cin';
+            dInp.style.width = '240px';
+            dInp.placeholder = 'Текст (оставь пустым для линии)';
+            dInp.value = dt;
+            dInp.onchange = function(){ row.divText = this.value; renderGrid(); };
+            
+            var zlbl = document.createElement('span');
+            zlbl.className = 'zoom-lbl';
+            zlbl.textContent = 'Размер:';
+            
+            var dZoom = document.createElement('input');
+            dZoom.type = 'number';
+            dZoom.className = 'zoom-num';
+            dZoom.min = 50; dZoom.max = 500;
+            dZoom.value = dz;
+            
+            function applyDZoom(val) {
+                row.divZoom = Math.min(500, Math.max(50, parseInt(val)||100));
+                dZoom.value = row.divZoom;
+                dtext.style.fontSize = (12 * (row.divZoom / 100)) + 'px';
+            }
+            
+            dZoom.addEventListener('change', function(){ applyDZoom(this.value); });
+            dZoom.addEventListener('input', function(){ applyDZoom(this.value); });
+            dZoom.addEventListener('wheel', function(e){
+                e.preventDefault();
+                applyDZoom((row.divZoom||100) + (e.deltaY<0 ? 5 : -5));
+            }, {passive:false});
+            
+            editPanel.appendChild(dInp);
+            editPanel.appendChild(zlbl);
+            editPanel.appendChild(dZoom);
+            
+            dwrap.appendChild(editPanel);
+        }
+
         rw.appendChild(dwrap);
     } else {
         row.cells.forEach(function(cell,ci){
