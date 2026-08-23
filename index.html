@@ -105,6 +105,11 @@ body.em .cell:hover .cell-bg{transform:none}
 body.em .cell{background:#cc2222!important}
 .fill-ok{display:inline-flex;align-items:center;gap:3px;background:rgba(0,180,0,.85);color:#fff;font-size:10px;padding:2px 7px;border-radius:3px;pointer-events:none;white-space:nowrap}
 
+/* КЛАСС ДЛЯ ФЛИПА (Отзеркаливания) */
+.flip-h { transform: scaleX(-1) !important; }
+.cell:hover .cell-bg.flip-h { transform: scaleX(-1) scale(1.03) !important; }
+body.em .cell:hover .cell-bg.flip-h { transform: scaleX(-1) !important; }
+
 /* КАРТИНКА-ВРЕЗКА (ИНТЕРАКТИВНАЯ) */
 .cell-inset {
     position: absolute;
@@ -121,12 +126,12 @@ body.em .cell{background:#cc2222!important}
 }
 body:not(.em) .cell-inset { pointer-events: auto; }
 body:not(.em) .cell-inset:hover {
-    height: 100%;
-    max-width: 100%;
-    width: 100%;
-    border-width: 0;
-    box-shadow: none;
-    z-index: 10;
+    height: 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    border-width: 0 !important;
+    box-shadow: none !important;
+    z-index: 10 !important;
 }
 body.em .cell-inset { pointer-events: none; opacity: 0.8; }
 
@@ -139,8 +144,8 @@ body.em .cell-inset { pointer-events: none; opacity: 0.8; }
 .ccap {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 24px 10px 8px;
-    background: linear-gradient(transparent,rgba(0,0,0,.65));
+    padding: 30px 14px 10px;
+    background: linear-gradient(transparent,rgba(0,0,0,.75));
     color: #fff;
     font-size: 13px;
     font-weight: 500;
@@ -150,7 +155,7 @@ body.em .cell-inset { pointer-events: none; opacity: 0.8; }
     z-index: 4;
 }
 .cell:hover .ccap { opacity: 1; }
-body.em .ccap { opacity: 0 !important; } /* Скрываем в режиме редактора, чтобы не мешало */
+body.em .ccap { opacity: 0 !important; }
 
 .cnt-badge{position:absolute;bottom:9px;right:9px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;z-index:4}
 
@@ -160,46 +165,41 @@ body.em .ccap { opacity: 0 !important; } /* Скрываем в режиме р�
 .fs-item{height:22px;width:auto;min-width:16px;max-width:55px;border-radius:2px;border:1.5px solid rgba(255,255,255,.6);flex-shrink:0;cursor:pointer;opacity:.55;object-fit:cover;transition:opacity .1s,border-color .1s;display:block}
 .fs-item:hover,.fs-item.act{opacity:1;border-color:#fff}
 
-/* EDIT CELL OVERLAY */
-.ceo{position:absolute;inset:0;background:rgba(0,0,0,.75);display:none;flex-direction:column;gap:4px;padding:12px;z-index:10;overflow-y:auto}
+/* EDIT CELL OVERLAY (ОБНОВЛЕННЫЙ) */
+.ceo{position:absolute;inset:0;background:rgba(0,0,0,.8);display:none;flex-direction:column;gap:4px;padding:8px 12px;z-index:10;overflow-y:auto}
 .ceo > * { flex-shrink: 0; } 
 body.em .ceo{display:flex}
 body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
-.cin{background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:6px 9px;border-radius:3px;width:100%;font-family:inherit;outline:none}
+.cin{background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:5px 8px;border-radius:3px;width:100%;font-family:inherit;outline:none}
 .cin:focus{border-color:#00a0ff}
 .cin::placeholder{color:rgba(255,255,255,.4)}
-.eo-row{display:flex;align-items:center;gap:5px;margin-top:2px}
-.eo-label{font-size:11px;color:rgba(255,255,255,.7)}
-.eo-check{accent-color:#00a0ff;width:14px;height:14px;}
+.eo-row{display:flex;align-items:center;gap:6px;margin-top:2px}
+.eo-label{font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap;}
+.eo-check{accent-color:#00a0ff;width:13px;height:13px;}
 
-/* POS BAR */
-.pos-row{display:flex;align-items:center;gap:6px;margin-top:4px}
-.pos-bar-wrap{flex:1;height:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
-.pos-bar-thumb{position:absolute;top:2px;bottom:2px;width:14px;background:#00a0ff;border-radius:2px;transform:translateX(-50%);transition:left .05s;pointer-events:none}
-.pos-bar-icon{position:absolute;right:5px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.4);font-size:10px;pointer-events:none}
-.pos-reset-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:3px;font-size:12px;padding:1px 7px;cursor:pointer;flex-shrink:0;line-height:1.4}
-.pos-reset-btn:hover{background:rgba(0,160,255,.4)}
+/* POS BAR COMPACT */
+.pos-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
+.pos-bar-thumb{position:absolute;top:2px;bottom:2px;width:10px;background:#00a0ff;border-radius:2px;transform:translateX(-50%);transition:left .05s;pointer-events:none}
 
-.extra-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-.extra-item{position:relative;width:38px;height:38px;cursor:grab}
+.extra-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.extra-item{position:relative;width:34px;height:34px;cursor:grab}
 .extra-item.drag-over{outline:2px dashed #00a0ff;outline-offset:1px}
 .extra-item.dragging{opacity:.4}
+.extra-item .eibg{width:100%;height:100%;border-radius:2px;border:1px solid rgba(255,255,255,.3);background-size:cover;background-position:center}
+.extra-del{position:absolute;top:-5px;right:-5px;background:#e00;color:#fff;border:none;border-radius:50%;width:14px;height:14px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* zoom slider & input NO ARROWS */
-.zoom-row{display:flex;align-items:center;gap:6px;margin-top:4px}
 .zoom-num{
-  width:46px; background:rgba(0,0,0,.7); border:1px solid rgba(255,255,255,.25); 
-  color:#fff; font-size:11px; padding:3px 5px; border-radius:3px; font-family:inherit; text-align:center;
+  width:40px; background:rgba(0,0,0,.7); border:1px solid rgba(255,255,255,.25); 
+  color:#fff; font-size:11px; padding:2px 4px; border-radius:3px; font-family:inherit; text-align:center;
   -moz-appearance: textfield; 
 }
-.zoom-num::-webkit-outer-spin-button,
-.zoom-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.zoom-num::-webkit-outer-spin-button, .zoom-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .zoom-lbl{font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap}
-.extra-item .eibg{width:100%;height:100%;border-radius:2px;border:1px solid rgba(255,255,255,.3);background-size:cover;background-position:center}
-.extra-del{position:absolute;top:-5px;right:-5px;background:#e00;color:#fff;border:none;border-radius:50%;width:15px;height:15px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cclr{background:rgba(200,40,40,.75);color:#fff;border:none;border-radius:3px;font-size:10px;padding:4px 8px;cursor:pointer;margin-top:auto;}
-.cdef{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:3px;font-size:10px;padding:4px 8px;cursor:pointer;margin-top:auto;}
-.cdef:hover{background:rgba(255,255,255,.25);}
+
+/* КНОПКИ УПРАВЛЕНИЯ */
+.cclr{background:rgba(200,40,40,.75);color:#fff;border:none;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer;}
+.cdef{background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:3px;font-size:11px;padding:4px 7px;cursor:pointer; transition:background .1s;}
+.cdef:hover{background:rgba(255,255,255,.3);}
 
 /* ADD ROW BUTTONS */
 #addbar{display:none;padding:12px 0;gap:8px;flex-wrap:wrap;align-items:center}
@@ -238,7 +238,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
 
-/* ═════ ПЕЧАТНАЯ ВЕРСИЯ ═════ */
+/* ═════ ПЕЧАТНАЯ ВЕРСИЯ (АЛЬБОМНЫЙ ПРЕЗЕНТАЦИОННЫЙ ФОРМАТ) ═════ */
 @media print{
   @page { margin: 0; size: A4 landscape; }
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -298,7 +298,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   
   .cell-bg { display: none !important; }
   
-  .ccap { opacity: 1 !important; position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.65)) !important; color: #fff !important; }
+  .ccap { opacity: 1 !important; position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
   .fill-ok, .cnt-badge { display: none !important; }
 
   #print-footer {
@@ -656,7 +656,6 @@ function renderGrid(){
       var grip=document.createElement('span');grip.className='drag-grip';grip.textContent='⠿';grip.title='Перетащить строку';
       rc.appendChild(grip);
       
-      /* КНОПКА ВОЗВРАТА К ДЕФОЛТУ */
       var btnDef = document.createElement('button');
       btnDef.className = 'rctrl-btn sq-btn';
       btnDef.textContent = '⟲ 280px';
@@ -669,14 +668,13 @@ function renderGrid(){
       };
       rc.appendChild(btnDef);
       
-      /* КНОПКА ДУБЛИКАТА ПУСТОЙ СТРОКИ */
       var btnDup = document.createElement('button');
       btnDup.className = 'rctrl-btn sq-btn';
       btnDup.textContent = '⧉ Копия';
       btnDup.title = 'Создать такую же строку ниже (пустую)';
       btnDup.onclick = function(){
           var newRow = { id: 'r'+Date.now(), type: row.type, rowH: row.rowH, cells: [] };
-          for(var i=0; i<RC[row.type].cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:''});
+          for(var i=0; i<RC[row.type].cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false});
           var idx = S.rows.findIndex(function(r){return r.id===row.id;});
           S.rows.splice(idx+1, 0, newRow);
           renderGrid();
@@ -705,16 +703,20 @@ function renderGrid(){
       var bg=document.createElement('div');bg.className='cell-bg';
       var zoomVal=cell.zoom||100;
       var posX=cell.posX!==undefined?cell.posX:50;
+      var posY=cell.posY!==undefined?cell.posY:50;
       bg.style.backgroundSize=zoomVal===100?'cover':zoomVal+'%';
-      bg.style.backgroundPosition=posX+'% center';
+      bg.style.backgroundPosition=posX+'% ' + posY+'%';
+      if(cell.flipMain) bg.classList.add('flip-h');
+      
       if(imgUrl)bg.style.backgroundImage='url('+imgUrl+')';
       bgWrap.appendChild(bg);
       
-      // ВРЕЗКА (INSET IMAGE) С УВЕЛИЧЕНИЕМ ПРИ НАВЕДЕНИИ
+      // ВРЕЗКА (INSET IMAGE) 
       if(cell.insetUrl && !cell.isText) {
           var insetImg = document.createElement('img');
           insetImg.src = gdFull(cell.insetUrl); 
           insetImg.className = 'cell-inset';
+          if(cell.flipInset) insetImg.classList.add('flip-h');
           bgWrap.appendChild(insetImg);
       }
       
@@ -784,6 +786,7 @@ function renderGrid(){
         pimg.src=gdFull(imgUrl); 
         pimg.alt='';
         pimg.className='cell-print-img';
+        if(cell.flipMain) pimg.classList.add('flip-h');
         bgWrap.appendChild(pimg);
       }
       
@@ -791,16 +794,17 @@ function renderGrid(){
         if(!pimg) return;
         var z = cell.zoom || 100;
         var px = cell.posX !== undefined ? cell.posX : 50;
+        var py = cell.posY !== undefined ? cell.posY : 50;
         pimg.style.width = z + '%';
         pimg.style.height = z + '%';
         pimg.style.left = ((100 - z) * (px / 100)) + '%';
-        pimg.style.top = ((100 - z) * 0.5) + '%';
+        pimg.style.top = ((100 - z) * (py / 100)) + '%';
       }
 
       if(IS_EDIT){
         var swapActive=false,swapThreshold=8,swapStartX=0,swapStartY=0;
         div.addEventListener('mousedown',function(e){
-          if(e.target.closest('.ceo')||e.target.closest('.pos-row')||e.target.closest('.zoom-row')||e.target.closest('.zoom-num')||e.target.closest('.cell-text-block')) return;
+          if(e.target.closest('.ceo')||e.target.closest('.pos-bar-wrap')||e.target.closest('.zoom-num')||e.target.closest('.cell-text-block')) return;
           swapActive=false;swapStartX=e.clientX;swapStartY=e.clientY;
           cellDragSrc={rowId:row.id,ci:ci};
         });
@@ -839,55 +843,63 @@ function renderGrid(){
 
         var eo=document.createElement('div');eo.className='ceo';
         
-        var typeRow = document.createElement('div');
-        typeRow.className = 'eo-row';
-        typeRow.style.background = 'rgba(255,255,255,0.1)';
-        typeRow.style.padding = '6px';
-        typeRow.style.borderRadius = '3px';
-        var typeChk = document.createElement('input');
-        typeChk.type = 'checkbox';
-        typeChk.className = 'eo-check';
-        typeChk.checked = cell.isText === true;
-        var typeLbl = document.createElement('span');
-        typeLbl.className = 'eo-label';
-        typeLbl.style.color = '#fff';
-        typeLbl.textContent = 'Текстовый блок (Без картинки)';
-        typeRow.appendChild(typeChk); typeRow.appendChild(typeLbl);
-        eo.appendChild(typeRow);
-        
         var txtArea = document.createElement('textarea');
         txtArea.className = 'cin';
         txtArea.placeholder = 'Length 169.3 m\nTexture sets 4k + 1k\n...';
         txtArea.style.height = '140px';
-        txtArea.style.marginTop = '4px';
         txtArea.style.resize = 'vertical';
         txtArea.value = cell.textContent || '';
         txtArea.style.display = cell.isText ? 'block' : 'none';
+        txtArea.onchange = function() { cell.textContent = this.value; renderGrid(); };
         eo.appendChild(txtArea);
 
         var imgControlsWrap = document.createElement('div');
         imgControlsWrap.style.display = cell.isText ? 'none' : 'flex';
         imgControlsWrap.style.flexDirection = 'column';
-        imgControlsWrap.style.gap = '4px';
+        imgControlsWrap.style.gap = '6px';
 
         var ui=document.createElement('input');ui.className='cin';
-        ui.placeholder='Google Drive ссылка (главная картинка)...';ui.value=cell.url||'';
+        ui.placeholder='URL главной картинки...';ui.value=cell.url||'';
         ui.onchange=function(){cell.url=this.value;renderGrid();};
         
-        // ПОЛЕ ДЛЯ ВРЕЗКИ
         var insetUI = document.createElement('input'); insetUI.className='cin';
-        insetUI.placeholder='URL картинки-врезки (в углу)...'; insetUI.value = cell.insetUrl || '';
+        insetUI.placeholder='URL врезки (картинка в углу)...'; insetUI.value = cell.insetUrl || '';
         insetUI.onchange=function(){cell.insetUrl=this.value;renderGrid();};
         
         var ci2=document.createElement('input');ci2.className='cin';
         ci2.placeholder='Подпись снизу...';ci2.value=cell.caption||'';
         ci2.onchange=function(){cell.caption=this.value;};
 
-        var zrow=document.createElement('div');zrow.className='zoom-row';
-        var zlbl=document.createElement('span');zlbl.className='zoom-lbl';zlbl.textContent='Масштаб:';
-        var znum=document.createElement('input');znum.type='number';znum.className='zoom-num';
-        znum.min=30;znum.max=300;znum.value=cell.zoom||100;
-        var zpct=document.createElement('span');zpct.className='zoom-lbl';zpct.textContent='%';
+        // --- ROW 1: ZOOM, X, Y ---
+        var ctrlRow1 = document.createElement('div');
+        ctrlRow1.className = 'eo-row';
+        ctrlRow1.style.justifyContent = 'space-between';
+        ctrlRow1.style.gap = '8px';
+
+        var zlbl = document.createElement('span'); zlbl.className='zoom-lbl'; zlbl.textContent='Z:';
+        var znum = document.createElement('input'); znum.type='number'; znum.className='zoom-num'; 
+        znum.min=30; znum.max=300; znum.value=cell.zoom||100;
+        
+        var xlbl = document.createElement('span'); xlbl.className='zoom-lbl'; xlbl.textContent='X:';
+        var xwrap = document.createElement('div'); xwrap.className='pos-bar-wrap'; 
+        var xthumb = document.createElement('div'); xthumb.className='pos-bar-thumb'; xwrap.appendChild(xthumb);
+
+        var ylbl = document.createElement('span'); ylbl.className='zoom-lbl'; ylbl.textContent='Y:';
+        var ywrap = document.createElement('div'); ywrap.className='pos-bar-wrap'; 
+        var ythumb = document.createElement('div'); ythumb.className='pos-bar-thumb'; ywrap.appendChild(ythumb);
+
+        function applyPos(px, py){
+          if(px !== undefined) cell.posX=Math.min(100,Math.max(0,Math.round(px)));
+          if(py !== undefined) cell.posY=Math.min(100,Math.max(0,Math.round(py)));
+          var cx = cell.posX!==undefined?cell.posX:50;
+          var cy = cell.posY!==undefined?cell.posY:50;
+          xthumb.style.left=cx+'%';
+          ythumb.style.left=cy+'%';
+          bg.style.backgroundPosition=cx+'% '+cy+'%';
+          updatePrintImg();
+        }
+        applyPos(cell.posX, cell.posY);
+
         function applyZoom(val){
           cell.zoom=Math.min(300,Math.max(30,parseInt(val)||100));
           znum.value=cell.zoom;
@@ -895,6 +907,7 @@ function renderGrid(){
           updatePrintImg();
           if(div.updateFill) div.updateFill();
         }
+        
         znum.addEventListener('change',function(){applyZoom(this.value);});
         znum.addEventListener('input',function(){applyZoom(this.value);});
         znum.addEventListener('mousedown',function(e){e.stopPropagation();});
@@ -902,61 +915,65 @@ function renderGrid(){
           e.preventDefault();
           applyZoom((cell.zoom||100)+(e.deltaY<0?1:-1));
         },{passive:false});
-        zrow.appendChild(zlbl);zrow.appendChild(znum);zrow.appendChild(zpct);
 
-        var prow=document.createElement('div');prow.className='pos-row';
-        var plbl=document.createElement('span');plbl.className='zoom-lbl';plbl.textContent='Позиция:';
-        var pwrap=document.createElement('div');pwrap.className='pos-bar-wrap';
-        var pthumb=document.createElement('div');pthumb.className='pos-bar-thumb';
-        var picon=document.createElement('div');picon.className='pos-bar-icon';picon.textContent='◂▸';
-        pwrap.appendChild(pthumb);pwrap.appendChild(picon);
-
-        function applyPos(px){
-          cell.posX=Math.min(100,Math.max(0,Math.round(px)));
-          pthumb.style.left=cell.posX+'%';
-          bg.style.backgroundPosition=cell.posX+'% center';
-          updatePrintImg();
-        }
-        applyPos(cell.posX!==undefined?cell.posX:50);
-
-        pwrap.addEventListener('mousedown',function(e){
+        xwrap.addEventListener('mousedown',function(e){
           e.preventDefault();e.stopPropagation();
-          var rect=pwrap.getBoundingClientRect();
+          var rect=xwrap.getBoundingClientRect();
           var startX=e.clientX,startPx=cell.posX!==undefined?cell.posX:50;
           function onMove(ev){
             var dx=ev.clientX-startX;
-            var dpct=dx/rect.width*100;
-            applyPos(startPx+dpct);
+            applyPos(startPx+(dx/rect.width*100), cell.posY);
           }
           function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
           document.addEventListener('mousemove',onMove);
           document.addEventListener('mouseup',onUp);
         });
-        
-        prow.addEventListener('wheel', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            var delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
-            var step = delta > 0 ? 2 : -2; 
-            var currentPx = cell.posX !== undefined ? cell.posX : 50;
-            applyPos(currentPx + step);
+        xwrap.addEventListener('wheel', function(e){
+            e.preventDefault(); e.stopPropagation();
+            var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
+            applyPos((cell.posX !== undefined ? cell.posX : 50) + step, cell.posY);
         }, {passive: false});
 
-        prow.appendChild(plbl);prow.appendChild(pwrap);
-        var pReset=document.createElement('button');pReset.className='pos-reset-btn';
-        pReset.textContent='⊙';pReset.title='По центру';
-        pReset.addEventListener('mousedown',function(e){e.stopPropagation();});
-        pReset.onclick=function(){applyPos(50);};
-        prow.appendChild(pReset);
+        ywrap.addEventListener('mousedown',function(e){
+          e.preventDefault();e.stopPropagation();
+          var rect=ywrap.getBoundingClientRect();
+          var startX=e.clientX,startPy=cell.posY!==undefined?cell.posY:50;
+          function onMove(ev){
+            var dx=ev.clientX-startX; // Use X movement on horizontal bar for Y value
+            applyPos(cell.posX, startPy+(dx/rect.width*100));
+          }
+          function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
+          document.addEventListener('mousemove',onMove);
+          document.addEventListener('mouseup',onUp);
+        });
+        ywrap.addEventListener('wheel', function(e){
+            e.preventDefault(); e.stopPropagation();
+            var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
+            applyPos(cell.posX, (cell.posY !== undefined ? cell.posY : 50) + step);
+        }, {passive: false});
+
+        ctrlRow1.appendChild(zlbl); ctrlRow1.appendChild(znum);
+        ctrlRow1.appendChild(xlbl); ctrlRow1.appendChild(xwrap);
+        ctrlRow1.appendChild(ylbl); ctrlRow1.appendChild(ywrap);
+
+        // --- ROW 2: EXTRAS ---
+        var ctrlRow2 = document.createElement('div');
+        ctrlRow2.className = 'eo-row';
+        ctrlRow2.style.gap = '8px';
         
-        var frow=document.createElement('div');frow.className='eo-row';
         var fchk=document.createElement('input');fchk.type='checkbox';fchk.className='eo-check';
         fchk.checked=cell.showFilmstrip!==false;
         fchk.onchange=function(){cell.showFilmstrip=this.checked;};
-        var flbl=document.createElement('span');flbl.className='eo-label';flbl.textContent='Filmstrip на главной';
-        frow.appendChild(fchk);frow.appendChild(flbl);
+        var flbl=document.createElement('span');flbl.className='eo-label';flbl.textContent='Лента:';
         
-        var elbl=document.createElement('div');elbl.className='eo-label';elbl.style.marginTop='4px';elbl.textContent='Доп. изображения:';
+        var addExt=document.createElement('input');addExt.className='cin';
+        addExt.placeholder='URL доп... → Enter';
+        addExt.style.flex = '1';
+        
+        ctrlRow2.appendChild(fchk);
+        ctrlRow2.appendChild(flbl);
+        ctrlRow2.appendChild(addExt);
+        
         var extList=document.createElement('div');extList.className='extra-list';
         function renderExtras(){
           extList.innerHTML='';
@@ -999,8 +1016,6 @@ function renderGrid(){
           });
         }
         renderExtras();
-        var addExt=document.createElement('input');addExt.className='cin';
-        addExt.placeholder='URL доп. картинки → Enter';addExt.style.marginTop='3px';
         addExt.onkeydown=function(e){
           if(e.key==='Enter'&&this.value.trim()){
             if(!cell.images)cell.images=[];
@@ -1011,49 +1026,106 @@ function renderGrid(){
         imgControlsWrap.appendChild(ui);
         imgControlsWrap.appendChild(insetUI);
         imgControlsWrap.appendChild(ci2);
-        imgControlsWrap.appendChild(zrow);
-        imgControlsWrap.appendChild(prow);
-        imgControlsWrap.appendChild(frow);
-        imgControlsWrap.appendChild(elbl);
+        imgControlsWrap.appendChild(ctrlRow1);
+        imgControlsWrap.appendChild(ctrlRow2);
         imgControlsWrap.appendChild(extList);
-        imgControlsWrap.appendChild(addExt);
         eo.appendChild(imgControlsWrap);
 
+        // --- BOTTOM ROW ---
         var bottomRow=document.createElement('div');
-        bottomRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px';
+        bottomRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px';
         var fo=document.createElement('div');fo.className='fill-ok';
         
         div.updateFill = function() { checkCellFill(div, cell, fo); };
 
         var btnWrap=document.createElement('div');
         btnWrap.style.display='flex';
-        btnWrap.style.gap='6px';
+        btnWrap.style.flexWrap='wrap';
+        btnWrap.style.justifyContent='flex-end';
+        btnWrap.style.gap='5px';
+        
+        var btnText = document.createElement('button');
+        btnText.className = 'cdef';
+        btnText.textContent = cell.isText ? '🖼 Картинка' : '📝 Текст';
+        btnText.style.background = cell.isText ? '#00a0ff' : '';
+
+        var btnFlipMain = document.createElement('button');
+        btnFlipMain.className = 'cdef';
+        btnFlipMain.textContent = '◨ Фон';
+        btnFlipMain.style.background = cell.flipMain ? '#00a0ff' : '';
+        btnFlipMain.style.display = cell.isText ? 'none' : 'block';
+
+        var btnFlipInset = document.createElement('button');
+        btnFlipInset.className = 'cdef';
+        btnFlipInset.textContent = '◨ Врезка';
+        btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
+        btnFlipInset.style.display = cell.isText ? 'none' : 'block';
 
         var cdef=document.createElement('button');
         cdef.className='cdef';
         cdef.textContent='⟲ Сброс';
-        cdef.onclick=function(){ applyZoom(100); applyPos(50); };
 
         var clr=document.createElement('button');
         clr.className='cclr';
         clr.textContent='✕ Очистить';
-        (function(c){clr.onclick=function(){c.url='';c.caption='';c.images=[];c.textContent='';c.insetUrl='';c.zoom=100;c.posX=50;renderGrid();};})(cell);
 
+        // Логика кнопок
+        btnText.onclick = function(e){ 
+            e.stopPropagation();
+            cell.isText = !cell.isText; 
+            btnText.textContent = cell.isText ? '🖼 Картинка' : '📝 Текст';
+            btnText.style.background = cell.isText ? '#00a0ff' : '';
+            
+            if(cell.isText) {
+                imgControlsWrap.style.display = 'none';
+                txtArea.style.display = 'block';
+                btnFlipMain.style.display = 'none';
+                btnFlipInset.style.display = 'none';
+                bgWrap.style.display = 'none';
+                txtBlock.style.display = 'block';
+            } else {
+                imgControlsWrap.style.display = 'flex';
+                txtArea.style.display = 'none';
+                btnFlipMain.style.display = 'block';
+                btnFlipInset.style.display = 'block';
+                bgWrap.style.display = 'block';
+                txtBlock.style.display = 'none';
+            }
+            if(div.updateFill) div.updateFill();
+        };
+
+        btnFlipMain.onclick = function(e) {
+            e.stopPropagation();
+            cell.flipMain = !cell.flipMain;
+            btnFlipMain.style.background = cell.flipMain ? '#00a0ff' : '';
+            if(cell.flipMain) bg.classList.add('flip-h'); else bg.classList.remove('flip-h');
+            updatePrintImg();
+        };
+
+        btnFlipInset.onclick = function(e) {
+            e.stopPropagation();
+            cell.flipInset = !cell.flipInset;
+            btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
+            var inImg = bgWrap.querySelector('.cell-inset');
+            if(inImg) {
+                if(cell.flipInset) inImg.classList.add('flip-h'); else inImg.classList.remove('flip-h');
+            }
+        };
+
+        cdef.onclick=function(e){ e.stopPropagation(); applyZoom(100); applyPos(50, 50); cell.flipMain=false; cell.flipInset=false; renderGrid(); };
+        clr.onclick=function(e){ e.stopPropagation(); cell.url=''; cell.caption=''; cell.images=[]; cell.textContent=''; cell.insetUrl=''; cell.zoom=100; cell.posX=50; cell.posY=50; cell.flipMain=false; cell.flipInset=false; renderGrid(); };
+
+        btnWrap.appendChild(btnText);
+        btnWrap.appendChild(btnFlipMain);
+        btnWrap.appendChild(btnFlipInset);
         btnWrap.appendChild(cdef);
         btnWrap.appendChild(clr);
+        
         bottomRow.appendChild(fo);
         bottomRow.appendChild(btnWrap);
         eo.appendChild(bottomRow);
         
         div.appendChild(eo);
-
-        typeChk.onchange = function() {
-            cell.isText = this.checked;
-            txtArea.style.display = cell.isText ? 'block' : 'none';
-            imgControlsWrap.style.display = cell.isText ? 'none' : 'flex';
-            renderGrid();
-        };
-        txtArea.onchange = function() { cell.textContent = this.value; renderGrid(); };
       }
 
       var lbIdx=lbItems.length;
@@ -1088,14 +1160,13 @@ function openLB(idx){
   var cell=item.cell;
   if(cell.isText) return;
   
-  var allImgs=[{url:cell.url,caption:cell.caption}];
-  
-  // Добавляем врезку в лайтбокс, если она есть
+  var allImgs=[{url:cell.url, caption:cell.caption, flip:cell.flipMain}];
   if (cell.insetUrl) {
-      allImgs.push({url: cell.insetUrl, caption: 'Reference'});
+      allImgs.push({url: cell.insetUrl, caption: 'Reference', flip:cell.flipInset});
   }
-  
-  allImgs = allImgs.concat((cell.images||[]).filter(function(x){return x&&x.url&&x.url!==cell.url;}));
+  (cell.images||[]).forEach(function(x){
+      if(x&&x.url&&x.url!==cell.url) allImgs.push({url: x.url, caption: '', flip: false});
+  });
 
   var curI=0;
 
@@ -1105,13 +1176,17 @@ function openLB(idx){
     var lbScroll=document.getElementById('lb-scroll');
     var track=document.getElementById('lb-scroll-track');
     var thumb=document.getElementById('lb-scroll-thumb');
+    
     lbImg.src=gdFull(allImgs[i].url);
+    if(allImgs[i].flip) lbImg.classList.add('flip-h'); else lbImg.classList.remove('flip-h');
+    
     var title=cell.caption||'';
     var slideCap=allImgs[i].caption||'';
     document.getElementById('lb-title').textContent=title;
     var capEl=document.getElementById('lb-cap');
     capEl.textContent=(slideCap&&slideCap!==title)?slideCap:'';
     capEl.style.display=(slideCap&&slideCap!==title)?'block':'none';
+    
     document.querySelectorAll('.lb-thumb').forEach(function(t,ti){t.classList.toggle('act',ti===i);});
     lbImg.onload=function(){
       lbScroll.scrollLeft=0;
@@ -1135,6 +1210,7 @@ function openLB(idx){
     allImgs.forEach(function(im,i){
       var t=document.createElement('img');t.className='lb-thumb'+(i===0?' act':'');
       t.src=gd(im.url);t.alt='';
+      if(im.flip) t.classList.add('flip-h');
       (function(ii){t.onclick=function(){showI(ii);};})(i);
       th.appendChild(t);
     });
@@ -1226,7 +1302,7 @@ function dlPDF(){
 function addRow(type){
   var cfg=RC[type];if(!cfg)return;
   var cells=[];
-  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:''});
+  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false});
   S.rows.push({id:'r'+Date.now(),type:type,rowH:300,cells:cells});
   renderGrid();
   setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},50);
