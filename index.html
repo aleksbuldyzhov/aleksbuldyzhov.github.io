@@ -79,18 +79,18 @@ body.em .resize-handle{display:flex}
 .resize-bar{height:4px;width:50px;background:#ddd;border-radius:2px;transition:background .15s}
 .resize-handle:hover .resize-bar,.resize-handle.active .resize-bar{background:#00a0ff}
 
-/* НОВАЯ 12-КОЛОНОЧНАЯ СЕТКА */
+/* 12-КОЛОНОЧНАЯ СЕТКА */
 .rg{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
 
 /* CELLS */
 .cell{position:relative;overflow:hidden;background:#dde6ee;cursor:pointer; border: 1px solid #eee;}
-.c-3 { grid-column: span 3; }  /* 25% */
-.c-4 { grid-column: span 4; }  /* 33.3% */
-.c-6 { grid-column: span 6; }  /* 50% */
-.c-9 { grid-column: span 9; }  /* 75% */
-.c-12{ grid-column: span 12; } /* 100% */
+.c-3 { grid-column: span 3; }  
+.c-4 { grid-column: span 4; }  
+.c-6 { grid-column: span 6; }  
+.c-9 { grid-column: span 9; }  
+.c-12{ grid-column: span 12; } 
 
-/* ТЕКСТОВЫЕ БЛОКИ ВМЕСТО КАРТИНОК */
+/* ТЕКСТОВЫЕ БЛОКИ */
 .cell-text-block {
     position: absolute; inset: 0;
     background: #fff; color: #333;
@@ -98,22 +98,61 @@ body.em .resize-handle{display:flex}
     overflow-y: auto; white-space: pre-wrap; cursor: text;
 }
 
-/* Cell background */
+/* Фоны и картинки */
 .cell-bg{position:absolute;inset:0;background-size:cover;background-repeat:no-repeat;background-position:center;transition:transform .3s}
 .cell:hover .cell-bg{transform:scale(1.03)}
 body.em .cell:hover .cell-bg{transform:none}
 body.em .cell{background:#cc2222!important}
 .fill-ok{display:inline-flex;align-items:center;gap:3px;background:rgba(0,180,0,.85);color:#fff;font-size:10px;padding:2px 7px;border-radius:3px;pointer-events:none;white-space:nowrap}
 
+/* КАРТИНКА-ВРЕЗКА (ИНТЕРАКТИВНАЯ) */
+.cell-inset {
+    position: absolute;
+    top: 0; right: 0;
+    height: 42%; 
+    width: auto;
+    max-width: 45%;
+    object-fit: cover;
+    z-index: 5;
+    border-bottom: 2px solid #fff;
+    border-left: 2px solid #fff;
+    box-shadow: -3px 3px 15px rgba(0,0,0,0.3);
+    transition: all 0.25s ease-in-out;
+}
+body:not(.em) .cell-inset { pointer-events: auto; }
+body:not(.em) .cell-inset:hover {
+    height: 100%;
+    max-width: 100%;
+    width: 100%;
+    border-width: 0;
+    box-shadow: none;
+    z-index: 10;
+}
+body.em .cell-inset { pointer-events: none; opacity: 0.8; }
+
 .cell.cell-drag-over{outline:2px dashed #00a0ff;outline-offset:-2px}
 .cell.cell-dragging{opacity:.5}
 
 .cno{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:12px}
 
-/* НОВЫЙ ЧИСТЫЙ ДИЗАЙН ПОДПИСЕЙ */
-.ccap{position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:#fff;color:#222;font-size:13px;font-weight:500;pointer-events:none;z-index:2;border-top:1px solid #eee;}
+/* ПОДПИСИ (ВОЗВРАТ К ТЕМНОМУ ГРАДИЕНТУ) */
+.ccap {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 24px 10px 8px;
+    background: linear-gradient(transparent,rgba(0,0,0,.65));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+    z-index: 4;
+}
+.cell:hover .ccap { opacity: 1; }
+body.em .ccap { opacity: 0 !important; } /* Скрываем в режиме редактора, чтобы не мешало */
 
-.cnt-badge{position:absolute;bottom:9px;right:9px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;z-index:3}
+.cnt-badge{position:absolute;bottom:9px;right:9px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;z-index:4}
 
 /* FILMSTRIP */
 .filmstrip{position:absolute;bottom:45px;left:0;right:0;display:none;justify-content:center;gap:3px;padding:0 10px;z-index:3}
@@ -125,7 +164,7 @@ body.em .cell{background:#cc2222!important}
 .ceo{position:absolute;inset:0;background:rgba(0,0,0,.75);display:none;flex-direction:column;gap:4px;padding:12px;z-index:10;overflow-y:auto}
 .ceo > * { flex-shrink: 0; } 
 body.em .ceo{display:flex}
-body.em .ccap,.body.em .filmstrip{pointer-events:none;opacity:0!important}
+body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
 .cin{background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;padding:6px 9px;border-radius:3px;width:100%;font-family:inherit;outline:none}
 .cin:focus{border-color:#00a0ff}
 .cin::placeholder{color:rgba(255,255,255,.4)}
@@ -199,7 +238,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
 
-/* ═════ ПЕЧАТНАЯ ВЕРСИЯ (АЛЬБОМНЫЙ ПРЕЗЕНТАЦИОННЫЙ ФОРМАТ) ═════ */
+/* ═════ ПЕЧАТНАЯ ВЕРСИЯ ═════ */
 @media print{
   @page { margin: 0; size: A4 landscape; }
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -209,7 +248,6 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   .layout { padding: 12mm 16mm 0 16mm !important; max-width: none !important; }
   header { padding: 8mm 0 6mm !important; border-bottom: 1px solid #ddd; margin-bottom: 6px; }
 
-  /* ЖЕСТКИЙ УДАР ПО ССЫЛКАМ БРАУЗЕРА */
   a[href]::after { content: none !important; }
   a { text-decoration: none !important; color: inherit !important; }
 
@@ -220,24 +258,20 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   .hright { align-items: flex-end; }
   .hcontacts { font-size: 11pt; color: #444; }
 
-  /* FLEXBOX ВМЕСТО GRID — защита от багов */
   .rw { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6px !important; display: block !important; }
   #rows-wrap { padding: 4px 0; gap: 6px; display: block !important; }
   .rg { gap: 6px !important; display: flex !important; flex-wrap: nowrap !important; height: 100% !important; }
   
   .cell { position: relative !important; height: 100% !important; overflow: hidden !important; flex-shrink: 0 !important; background: transparent !important; border: 1px solid #e0e0e0 !important; }
   
-  /* Идеальная математика 12-колоночной сетки для PDF */
   .c-3  { width: calc(25% - 4.5px) !important; }
   .c-4  { width: calc(33.333% - 4px) !important; }
   .c-6  { width: calc(50% - 3px) !important; }
   .c-9  { width: calc(75% - 1.5px) !important; }
   .c-12 { width: 100% !important; }
   
-  /* Текстовые ячейки в PDF */
   .cell-text-block { position: absolute !important; inset: 0 !important; background: #fff !important; color: #111 !important; padding: 16px !important; font-size: 12pt !important; }
 
-  /* Математическая печатная картинка */
   .cell-print-img {
     display: block !important;
     position: absolute !important;
@@ -246,10 +280,25 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
     max-height: none !important;
     -webkit-print-color-adjust: exact !important;
   }
+  
+  /* Врезка в PDF (статичная, без анимации) */
+  .cell-inset {
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      right: 0 !important;
+      height: 42% !important;
+      width: auto !important;
+      max-width: 45% !important;
+      z-index: 5 !important;
+      border-left: 2px solid #fff !important;
+      border-bottom: 2px solid #fff !important;
+      -webkit-print-color-adjust: exact !important;
+  }
+  
   .cell-bg { display: none !important; }
   
-  /* Белая подпись под артом */
-  .ccap { opacity: 1 !important; position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2 !important; border-top: 1px solid #ddd !important; }
+  .ccap { opacity: 1 !important; position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.65)) !important; color: #fff !important; }
   .fill-ok, .cnt-badge { display: none !important; }
 
   #print-footer {
@@ -352,7 +401,6 @@ var API_KEY = '$2a$10$yiqe27PHrmTV/4eeP4rI4.R6d/kXdKb44upyfo9IY8XcU8gcKxsfC';
 var SECRET  = 'sannf2026';
 var IS_EDIT = new URLSearchParams(location.search).get('key') === SECRET;
 
-/* ДЕФОЛТНЫЕ ДАННЫЕ АВТОРА */
 var S = {
   name:'Aleksandr Buldyzhov', line1:'3D Artist · Hard Surface & Vehicles',
   line2:'Wargaming · Belgrade, Serbia', line3:'',
@@ -360,7 +408,6 @@ var S = {
   liUrl:'', asUrl:'', tgUrl:'', cvUrl:'', rows:[]
 };
 
-/* НОВЫЕ ШАБЛОНЫ ПОД 12 КОЛОНОК */
 var RC = {
   col4:  { cells:4, spans:[3,3,3,3] },
   col3:  { cells:3, spans:[4,4,4] },
@@ -444,7 +491,6 @@ function renderHeader(){
     hc.textContent = ct.join(' · ');
   }
 
-  // Печатный футер (Строго как в презентации: Aleksandr Buldyzhov e-mail: ...)
   var pn=document.getElementById('pf-name');if(pn)pn.textContent=S.name||'';
   var pe=document.getElementById('pf-email');if(pe)pe.textContent=S.email||'';
 }
@@ -610,6 +656,33 @@ function renderGrid(){
       var grip=document.createElement('span');grip.className='drag-grip';grip.textContent='⠿';grip.title='Перетащить строку';
       rc.appendChild(grip);
       
+      /* КНОПКА ВОЗВРАТА К ДЕФОЛТУ */
+      var btnDef = document.createElement('button');
+      btnDef.className = 'rctrl-btn sq-btn';
+      btnDef.textContent = '⟲ 280px';
+      btnDef.title = 'Сбросить высоту к базовой (280px)';
+      btnDef.onclick = function(){
+          row.rowH = 280;
+          rw.style.height = '280px';
+          rg.style.gridAutoRows = '280px';
+          rg.querySelectorAll('.cell').forEach(function(c){ if(c.updateFill) c.updateFill(); });
+      };
+      rc.appendChild(btnDef);
+      
+      /* КНОПКА ДУБЛИКАТА ПУСТОЙ СТРОКИ */
+      var btnDup = document.createElement('button');
+      btnDup.className = 'rctrl-btn sq-btn';
+      btnDup.textContent = '⧉ Копия';
+      btnDup.title = 'Создать такую же строку ниже (пустую)';
+      btnDup.onclick = function(){
+          var newRow = { id: 'r'+Date.now(), type: row.type, rowH: row.rowH, cells: [] };
+          for(var i=0; i<RC[row.type].cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:''});
+          var idx = S.rows.findIndex(function(r){return r.id===row.id;});
+          S.rows.splice(idx+1, 0, newRow);
+          renderGrid();
+      };
+      rc.appendChild(btnDup);
+
       var db=document.createElement('button');db.className='rctrl-btn del-btn';db.textContent='✕ Удалить';
       (function(id){db.onclick=function(){if(!confirm('Удалить строку?'))return;S.rows=S.rows.filter(function(r){return r.id!==id;});renderGrid();};})(row.id);
       rc.appendChild(db);
@@ -626,7 +699,6 @@ function renderGrid(){
       
       var imgUrl=gd(cell.url||'');
       
-      // БЛОК ИЗОБРАЖЕНИЯ
       var bgWrap = document.createElement('div');
       bgWrap.style.position = 'absolute'; bgWrap.style.inset = '0';
       
@@ -638,12 +710,18 @@ function renderGrid(){
       if(imgUrl)bg.style.backgroundImage='url('+imgUrl+')';
       bgWrap.appendChild(bg);
       
-      // БЛОК ТЕКСТА
+      // ВРЕЗКА (INSET IMAGE) С УВЕЛИЧЕНИЕМ ПРИ НАВЕДЕНИИ
+      if(cell.insetUrl && !cell.isText) {
+          var insetImg = document.createElement('img');
+          insetImg.src = gdFull(cell.insetUrl); 
+          insetImg.className = 'cell-inset';
+          bgWrap.appendChild(insetImg);
+      }
+      
       var txtBlock = document.createElement('div');
       txtBlock.className = 'cell-text-block';
       txtBlock.innerHTML = (cell.textContent || '').replace(/\n/g, '<br>');
       
-      // ПЕРЕКЛЮЧЕНИЕ ОТОБРАЖЕНИЯ
       if(cell.isText){
           bgWrap.style.display = 'none';
           txtBlock.style.display = 'block';
@@ -761,7 +839,6 @@ function renderGrid(){
 
         var eo=document.createElement('div');eo.className='ceo';
         
-        // ПЕРЕКЛЮЧАТЕЛЬ ТЕКСТ / КАРТИНКА
         var typeRow = document.createElement('div');
         typeRow.className = 'eo-row';
         typeRow.style.background = 'rgba(255,255,255,0.1)';
@@ -778,7 +855,6 @@ function renderGrid(){
         typeRow.appendChild(typeChk); typeRow.appendChild(typeLbl);
         eo.appendChild(typeRow);
         
-        // ПОЛЕ ДЛЯ ТЕКСТА
         var txtArea = document.createElement('textarea');
         txtArea.className = 'cin';
         txtArea.placeholder = 'Length 169.3 m\nTexture sets 4k + 1k\n...';
@@ -789,7 +865,6 @@ function renderGrid(){
         txtArea.style.display = cell.isText ? 'block' : 'none';
         eo.appendChild(txtArea);
 
-        // КОНТЕЙНЕР ДЛЯ НАСТРОЕК КАРТИНКИ
         var imgControlsWrap = document.createElement('div');
         imgControlsWrap.style.display = cell.isText ? 'none' : 'flex';
         imgControlsWrap.style.flexDirection = 'column';
@@ -798,8 +873,14 @@ function renderGrid(){
         var ui=document.createElement('input');ui.className='cin';
         ui.placeholder='Google Drive ссылка (главная картинка)...';ui.value=cell.url||'';
         ui.onchange=function(){cell.url=this.value;renderGrid();};
+        
+        // ПОЛЕ ДЛЯ ВРЕЗКИ
+        var insetUI = document.createElement('input'); insetUI.className='cin';
+        insetUI.placeholder='URL картинки-врезки (в углу)...'; insetUI.value = cell.insetUrl || '';
+        insetUI.onchange=function(){cell.insetUrl=this.value;renderGrid();};
+        
         var ci2=document.createElement('input');ci2.className='cin';
-        ci2.placeholder='Подпись снизу (белая плашка)...';ci2.value=cell.caption||'';
+        ci2.placeholder='Подпись снизу...';ci2.value=cell.caption||'';
         ci2.onchange=function(){cell.caption=this.value;};
 
         var zrow=document.createElement('div');zrow.className='zoom-row';
@@ -928,6 +1009,7 @@ function renderGrid(){
         };
 
         imgControlsWrap.appendChild(ui);
+        imgControlsWrap.appendChild(insetUI);
         imgControlsWrap.appendChild(ci2);
         imgControlsWrap.appendChild(zrow);
         imgControlsWrap.appendChild(prow);
@@ -955,7 +1037,7 @@ function renderGrid(){
         var clr=document.createElement('button');
         clr.className='cclr';
         clr.textContent='✕ Очистить';
-        (function(c){clr.onclick=function(){c.url='';c.caption='';c.images=[];c.textContent='';c.zoom=100;c.posX=50;renderGrid();};})(cell);
+        (function(c){clr.onclick=function(){c.url='';c.caption='';c.images=[];c.textContent='';c.insetUrl='';c.zoom=100;c.posX=50;renderGrid();};})(cell);
 
         btnWrap.appendChild(cdef);
         btnWrap.appendChild(clr);
@@ -965,7 +1047,6 @@ function renderGrid(){
         
         div.appendChild(eo);
 
-        // События переключателя текста
         typeChk.onchange = function() {
             cell.isText = this.checked;
             txtArea.style.display = cell.isText ? 'block' : 'none';
@@ -982,7 +1063,7 @@ function renderGrid(){
       }
 
       rg.appendChild(div);
-      updatePrintImg(); // Инициализация
+      updatePrintImg(); 
       if(IS_EDIT){
           setTimeout(function(){ if(div.updateFill) div.updateFill(); }, 50);
       }
@@ -1007,10 +1088,16 @@ function openLB(idx){
   var cell=item.cell;
   if(cell.isText) return;
   
+  var allImgs=[{url:cell.url,caption:cell.caption}];
+  
+  // Добавляем врезку в лайтбокс, если она есть
+  if (cell.insetUrl) {
+      allImgs.push({url: cell.insetUrl, caption: 'Reference'});
+  }
+  
+  allImgs = allImgs.concat((cell.images||[]).filter(function(x){return x&&x.url&&x.url!==cell.url;}));
+
   var curI=0;
-  var allImgs=[{url:cell.url,caption:cell.caption}].concat(
-    (cell.images||[]).filter(function(x){return x&&x.url&&x.url!==cell.url;})
-  );
 
   function showI(i){
     curI=i;
@@ -1139,7 +1226,7 @@ function dlPDF(){
 function addRow(type){
   var cfg=RC[type];if(!cfg)return;
   var cells=[];
-  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:''});
+  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:''});
   S.rows.push({id:'r'+Date.now(),type:type,rowH:300,cells:cells});
   renderGrid();
   setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},50);
