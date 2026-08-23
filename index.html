@@ -8,7 +8,7 @@
 <meta name="description" content="">
 <title>Portfolio Aleksandr Buldyzhov</title>
 <script type="text/javascript">
-/* Microsoft Clarity (Тепловые карты и записи экранов - оставляем) */
+/* Microsoft Clarity */
 (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","y68zizkq9o");
 </script>
 <style>
@@ -50,7 +50,8 @@ header{padding:22px 0 18px}
 .hlinks{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .hlinks a,.hlinks button{font-size:14px;color:#666;text-decoration:none;background:none;border:none;cursor:pointer; display:inline-block}
 .hlinks a:hover,.hlinks button:hover{color:#1a1a1a}
-.hpdf{padding:6px 14px;border:1px solid #ddd!important;border-radius:5px;color:#555!important;font-size:13px!important}
+.hcv, .hpdf {padding:6px 14px;border:1px solid #ddd!important;border-radius:5px;color:#555!important;font-size:13px!important; transition:all 0.15s;}
+.hcv:hover, .hpdf:hover {background:#f5f5f5;color:#000!important;}
 
 /* GRID AREA */
 #rows-wrap{display:flex;flex-direction:column;gap:6px;padding:12px 0 32px}
@@ -258,6 +259,66 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
 
+/* ПЕЧАТНАЯ ВЕРСИЯ */
+@media print{
+  @page { margin: 0; size: A4 landscape; }
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+
+  body { background:#fff!important; margin: 0 !important; padding: 0 !important; }
+  
+  .layout { padding: 10mm 15mm 0 15mm !important; max-width: 100% !important; width: 100% !important; margin: 0 auto !important; }
+  header { padding: 8mm 0 6mm !important; border-bottom: 1px solid #ddd; margin-bottom: 6px; }
+
+  a[href]::after { content: none !important; }
+  a { text-decoration: none !important; color: inherit !important; }
+
+  #etb, #addbar, .rctrl, .resize-handle, #loading, #lb, #nda-toast, .ceo, .div-edit-panel,
+  .filmstrip, .cnt-badge, .hcv, .hpdf, footer, #lb-scroll-track,
+  .hlinks { display: none !important; }
+
+  .hright { align-items: flex-end; }
+  .hcontacts { font-size: 11pt; color: #444; }
+
+  .rw { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6px !important; display: block !important; }
+  #rows-wrap { padding: 4px 0; gap: 6px; display: block !important; }
+  .rg { gap: 6px !important; display: flex !important; flex-wrap: nowrap !important; height: 100% !important; }
+  
+  .div-wrap { background: transparent !important; border: none !important; }
+  
+  .cell { position: relative !important; height: 100% !important; overflow: hidden !important; flex-shrink: 0 !important; background: transparent !important; border: 1px solid #e0e0e0 !important; }
+  
+  .c-3  { width: calc(25% - 4.5px) !important; }
+  .c-4  { width: calc(33.333% - 4px) !important; }
+  .c-6  { width: calc(50% - 3px) !important; }
+  .c-9  { width: calc(75% - 1.5px) !important; }
+  .c-12 { width: 100% !important; }
+  
+  .cell-text-block { position: absolute !important; inset: 0 !important; background: #fff !important; color: #111 !important; padding: 16px !important; font-size: 12pt !important; }
+
+  .cell-print-img { display: none !important; }
+  .cell-bg { display: block !important; }
+  
+  .cell-inset {
+      display: block !important;
+      position: absolute !important;
+      top: 0 !important;
+      right: 0 !important;
+      height: 42% !important;
+      width: auto !important;
+      max-width: 45% !important;
+      z-index: 5 !important;
+      border-left: 2px solid #fff !important;
+      border-bottom: 2px solid #fff !important;
+      -webkit-print-color-adjust: exact !important;
+  }
+  .cell-inset.flip-inset { border-left: none !important; border-right: 2px solid #fff !important; }
+  
+  .ccap { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
+  .ccap:not(.always-on) { opacity: 0 !important; }
+  .ccap.always-on { opacity: 1 !important; }
+  
+  .fill-ok, .cnt-badge { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -278,13 +339,14 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
     <button class="ebtn eexit" onclick="exitEdit()">✕ Выйти</button>
   </div>
   <div class="etb-row">
-    <span class="el">Email</span><input class="ei" id="eemail" style="width:160px">
-    <span class="el">LinkedIn</span><input class="ei" id="eli" style="width:165px">
-    <span class="el">ArtStation</span><input class="ei" id="eas" style="width:165px">
-    <span class="el">Telegram</span><input class="ei" id="etg" style="width:140px" placeholder="https://t.me/...">
-    <span class="el">PDF URL</span><input class="ei" id="ecv" style="width:165px" placeholder="Ссылка на PDF...">
-    <span class="el">GA ID</span><input class="ei" id="ega" style="width:125px" placeholder="G-XXXXXXX">
-    <div class="esp"></div>
+    <span class="el">Email</span><input class="ei" id="eemail" style="width:140px">
+    <span class="el">LinkedIn</span><input class="ei" id="eli" style="width:140px">
+    <span class="el">ArtStation</span><input class="ei" id="eas" style="width:140px">
+    <span class="el">Telegram</span><input class="ei" id="etg" style="width:120px" placeholder="https://t.me/...">
+    <span style="color:#333; margin:0 4px">|</span>
+    <span class="el">CV URL</span><input class="ei" id="ecv" style="width:140px" placeholder="Ссылка на резюме...">
+    <span class="el">PDF URL</span><input class="ei" id="epdf" style="width:140px" placeholder="Ссылка на портфолио...">
+    <span class="el">GA ID</span><input class="ei" id="ega" style="width:110px" placeholder="G-XXXXXXX">
   </div>
 </div>
 
@@ -350,7 +412,7 @@ var S = {
   name:'Aleksandr Buldyzhov', line1:'3D Artist · Hard Surface & Vehicles',
   line2:'Wargaming · Belgrade, Serbia', line3:'',
   email:'sannf4@gmail.com',
-  liUrl:'', asUrl:'', tgUrl:'', cvUrl:'', gaId:'',
+  liUrl:'', asUrl:'', tgUrl:'', cvUrl:'', pdfUrl:'', gaId:'',
   divTextColor:'#888888', divLineColor:'#e0e0e0',
   rows:[]
 };
@@ -442,13 +504,21 @@ function renderHeader(){
   lnk(S.liUrl,'LinkedIn');
   lnk(S.asUrl,'ArtStation');
   
-  // КНОПКА СКАЧИВАНИЯ PDF
+  // КНОПКИ СКАЧИВАНИЯ
   if(S.cvUrl) {
-      var pb=document.createElement('a');
-      pb.className='hpdf';
-      pb.textContent='↓ Portfolio PDF';
-      pb.href=S.cvUrl;
-      pb.target='_blank';
+      var cvb = document.createElement('a');
+      cvb.className = 'hcv';
+      cvb.textContent = '↓ CV';
+      cvb.href = S.cvUrl;
+      cvb.target = '_blank';
+      hl.appendChild(cvb);
+  }
+  if(S.pdfUrl) {
+      var pb = document.createElement('a');
+      pb.className = 'hpdf';
+      pb.textContent = '↓ Portfolio PDF';
+      pb.href = S.pdfUrl;
+      pb.target = '_blank';
       hl.appendChild(pb);
   }
 
@@ -681,7 +751,6 @@ function renderGrid(){
         var dz = row.divZoom || 100;
         var dBold = row.textBold || false;
         
-        // БЕРЕМ ГЛОБАЛЬНЫЕ ЦВЕТА ИЗ S
         var dTextColor = S.divTextColor || '#888888';
         var dLineColor = S.divLineColor || '#e0e0e0';
         
@@ -731,12 +800,12 @@ function renderGrid(){
             var tcLbl = document.createElement('span'); tcLbl.className='eo-label'; tcLbl.textContent='Текст:';
             var tcInp = document.createElement('input'); tcInp.type='color'; tcInp.className='color-picker';
             tcInp.value = dTextColor;
-            tcInp.onchange = function() { S.divTextColor = this.value; renderGrid(); }; // Меняем глобально!
+            tcInp.onchange = function() { S.divTextColor = this.value; renderGrid(); };
             
             var lcLbl = document.createElement('span'); lcLbl.className='eo-label'; lcLbl.textContent='Линия:';
             var lcInp = document.createElement('input'); lcInp.type='color'; lcInp.className='color-picker';
             lcInp.value = dLineColor;
-            lcInp.onchange = function() { S.divLineColor = this.value; renderGrid(); }; // Меняем глобально!
+            lcInp.onchange = function() { S.divLineColor = this.value; renderGrid(); };
 
             editPanel.appendChild(dInp);
             editPanel.appendChild(zlbl);
@@ -776,7 +845,7 @@ function renderGrid(){
           }
           bgWrap.appendChild(bg);
           
-          // ВРЕЗКА (INSET IMAGE) 
+          // ВРЕЗКА
           if(inUrl && !cell.isText) {
               var insetImg = document.createElement('img');
               insetImg.src = inUrl; 
@@ -1376,6 +1445,7 @@ function fillEditor(){
   document.getElementById('eas').value=S.asUrl||'';
   document.getElementById('etg').value=S.tgUrl||'';
   document.getElementById('ecv').value=S.cvUrl||'';
+  document.getElementById('epdf').value=S.pdfUrl||'';
   document.getElementById('ega').value=S.gaId||'';
 }
 function saveAll(){
@@ -1387,7 +1457,8 @@ function saveAll(){
   S.liUrl=document.getElementById('eli').value;
   S.asUrl=document.getElementById('eas').value;
   S.tgUrl=document.getElementById('etg').value;
-  S.cvUrl=document.getElementById('ecv').value;
+  S.cvUrl=document.getElementById('ecv').value.trim();
+  S.pdfUrl=document.getElementById('epdf').value.trim();
   S.gaId=document.getElementById('ega').value.trim();
   renderHeader();flash('Сохраняю...',false);apiSave();
 }
