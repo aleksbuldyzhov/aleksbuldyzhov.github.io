@@ -79,6 +79,11 @@ body.em .resize-handle{display:flex}
 .resize-bar{height:4px;width:50px;background:#ddd;border-radius:2px;transition:background .15s}
 .resize-handle:hover .resize-bar,.resize-handle.active .resize-bar{background:#00a0ff}
 
+/* РАЗДЕЛИТЕЛЬ */
+.div-wrap { position: relative; width: 100%; height: 100%; display: flex; align-items: center; }
+.div-line { width: 100%; height: 1px; background: #e0e0e0; }
+body.em .div-wrap { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #ffffff 10px, #ffffff 20px); border: 1px dashed #ddd; border-radius: 4px; }
+
 /* 12-КОЛОНОЧНАЯ СЕТКА */
 .rg{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
 
@@ -147,7 +152,7 @@ body.em .cell-inset { pointer-events: none; opacity: 0.8; }
 
 .cno{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:12px}
 
-/* ПОДПИСИ (ВОЗВРАТ К ТЕМНОМУ ГРАДИЕНТУ) */
+/* ПОДПИСИ (ТЕМНЫЙ ГРАДИЕНТ) */
 .ccap {
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -162,6 +167,7 @@ body.em .cell-inset { pointer-events: none; opacity: 0.8; }
     z-index: 4;
 }
 .cell:hover .ccap { opacity: 1; }
+.ccap.always-on { opacity: 1 !important; }
 body.em .ccap { opacity: 0 !important; }
 
 .cnt-badge{position:absolute;bottom:9px;right:9px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;z-index:4}
@@ -181,8 +187,8 @@ body.em .filmstrip, body.em .cnt-badge {pointer-events:none;opacity:0!important}
 .cin:focus{border-color:#00a0ff}
 .cin::placeholder{color:rgba(255,255,255,.4)}
 .eo-row{display:flex;align-items:center;gap:6px;margin-top:2px}
-.eo-label{font-size:11px;color:rgba(255,255,255,.9);white-space:nowrap;font-weight:500;}
-.eo-check{accent-color:#00a0ff;width:13px;height:13px;}
+.eo-label{font-size:11px;color:rgba(255,255,255,.9);white-space:nowrap;font-weight:500; cursor: pointer;}
+.eo-check{accent-color:#00a0ff;width:13px;height:13px; cursor: pointer;}
 
 /* POS BAR COMPACT */
 .pos-bar-wrap{flex:1;height:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;position:relative;cursor:ew-resize;user-select:none;touch-action:none}
@@ -216,6 +222,7 @@ body.em #addbar{display:flex}
 .albl{font-size:12px;color:#999;font-weight:600;}
 .abtn{padding:6px 12px;border:1px solid #ddd;border-radius:4px;font-size:12px;color:#444;background:#fff;cursor:pointer;font-weight:500;}
 .abtn:hover{border-color:#00a0ff;color:#00a0ff;background:#f5fbff;}
+.abtn-div{border-style:dashed;}
 
 /* LIGHTBOX */
 #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px}
@@ -247,7 +254,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 /* No select */
 .cell-bg,.fs-item,.lb-thumb{-webkit-user-select:none;user-select:none}
 
-/* ═════ ПЕЧАТНАЯ ВЕРСИЯ (АЛЬБОМНЫЙ ПРЕЗЕНТАЦИОННЫЙ ФОРМАТ) ═════ */
+/* ═════ ПЕЧАТНАЯ ВЕРСИЯ ═════ */
 @media print{
   @page { margin: 0; size: A4 landscape; }
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -270,6 +277,8 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   .rw { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6px !important; display: block !important; }
   #rows-wrap { padding: 4px 0; gap: 6px; display: block !important; }
   .rg { gap: 6px !important; display: flex !important; flex-wrap: nowrap !important; height: 100% !important; }
+  
+  .div-wrap { background: transparent !important; border: none !important; }
   
   .cell { position: relative !important; height: 100% !important; overflow: hidden !important; flex-shrink: 0 !important; background: transparent !important; border: 1px solid #e0e0e0 !important; }
   
@@ -311,7 +320,11 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
   
   .cell-bg { display: none !important; }
   
-  .ccap { opacity: 1 !important; position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
+  .ccap { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 6 !important; background: linear-gradient(transparent,rgba(0,0,0,.75)) !important; color: #fff !important; }
+  /* Показывать подпись в PDF только если стоит галочка 'Всегда видима' */
+  .ccap:not(.always-on) { opacity: 0 !important; }
+  .ccap.always-on { opacity: 1 !important; }
+  
   .fill-ok, .cnt-badge { display: none !important; }
 
   #print-footer {
@@ -379,6 +392,8 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
     <button class="abtn" onclick="addRow('col2')">▬▬ ▬▬ Две равные</button>
     <button class="abtn" onclick="addRow('col3')">▬ ▬ ▬ 3 равные</button>
     <button class="abtn" onclick="addRow('col4')">■ ■ ■ ■ 4 равные</button>
+    <span style="color:#ddd; margin:0 4px;">|</span>
+    <button class="abtn abtn-div" onclick="addRow('divider')">➖ Разделитель</button>
   </div>
 </div>
 
@@ -402,7 +417,7 @@ footer{border-top:1px solid #eee;padding:24px 40px;margin-top:8px}
 
 <div id="nda-toast">🔒 NDA — материалы защищены</div>
 
-<!-- PDF footer (Strict layout) -->
+<!-- PDF footer -->
 <div id="print-footer" style="display:none">
   <span id="pf-name"></span> e-mail: <span id="pf-email"></span>
 </div>
@@ -427,7 +442,8 @@ var RC = {
   col2:  { cells:2, spans:[6,6] },
   wideR: { cells:2, spans:[9,3] },
   wideL: { cells:2, spans:[3,9] },
-  full:  { cells:1, spans:[12] }
+  full:  { cells:1, spans:[12] },
+  divider: { cells:0, isDivider:true }
 };
 
 function sc(span){return 'c-'+span;}
@@ -539,22 +555,21 @@ function makeRowDraggable(rw,rowId,grip){
   });
 }
 
-function makeResizable(handle,row,rg,rw){
+function makeResizable(handle,row,rw,rg){
   handle.addEventListener('mousedown',function(e){
     e.preventDefault();e.stopPropagation();
     handle.classList.add('active');
     var startY=e.clientY;
-    var startH=row.rowH||280;
+    var startH=row.rowH||(rg?280:60);
     function onMove(e){
       var dy=e.clientY-startY;
-      row.rowH=Math.max(60,Math.min(1000,startH+dy));
+      row.rowH=Math.max(20,Math.min(1000,startH+dy));
       rw.style.height=row.rowH+'px';
-      rg.style.gridAutoRows=row.rowH+'px';
-      
-      if(IS_EDIT){
-          rg.querySelectorAll('.cell').forEach(function(c){
-              if(c.updateFill) c.updateFill();
-          });
+      if(rg){
+          rg.style.gridAutoRows=row.rowH+'px';
+          if(IS_EDIT){
+              rg.querySelectorAll('.cell').forEach(function(c){ if(c.updateFill) c.updateFill(); });
+          }
       }
     }
     function onUp(){
@@ -653,15 +668,20 @@ function renderGrid(){
 
   S.rows.forEach(function(row){
     var cfg=RC[row.type];if(!cfg)return;
-    if(!row.rowH)row.rowH=280;
+    var isDiv = cfg.isDivider;
+    
+    if(!row.rowH)row.rowH=isDiv?60:280;
     if(!row.cells)row.cells=[];
 
     var rw=document.createElement('div');rw.className='rw';
     rw.style.height = row.rowH + 'px';
 
-    var rg=document.createElement('div');rg.className='rg';
-    rg.style.gridAutoRows=row.rowH+'px';
-    rg.style.height='100%'; 
+    var rg = null;
+    if(!isDiv){
+        rg=document.createElement('div');rg.className='rg';
+        rg.style.gridAutoRows=row.rowH+'px';
+        rg.style.height='100%'; 
+    }
 
     if(IS_EDIT){
       var rc=document.createElement('div');rc.className='rctrl';
@@ -669,15 +689,18 @@ function renderGrid(){
       var grip=document.createElement('span');grip.className='drag-grip';grip.textContent='⠿';grip.title='Перетащить строку';
       rc.appendChild(grip);
       
+      var defHeight = isDiv ? 60 : 280;
       var btnDef = document.createElement('button');
       btnDef.className = 'rctrl-btn sq-btn';
-      btnDef.textContent = '⟲ 280px';
-      btnDef.title = 'Сбросить высоту к базовой (280px)';
+      btnDef.textContent = '⟲ ' + defHeight + 'px';
+      btnDef.title = 'Сбросить высоту к базовой';
       btnDef.onclick = function(){
-          row.rowH = 280;
-          rw.style.height = '280px';
-          rg.style.gridAutoRows = '280px';
-          rg.querySelectorAll('.cell').forEach(function(c){ if(c.updateFill) c.updateFill(); });
+          row.rowH = defHeight;
+          rw.style.height = defHeight + 'px';
+          if(rg){
+              rg.style.gridAutoRows = defHeight + 'px';
+              rg.querySelectorAll('.cell').forEach(function(c){ if(c.updateFill) c.updateFill(); });
+          }
       };
       rc.appendChild(btnDef);
       
@@ -687,7 +710,9 @@ function renderGrid(){
       btnDup.title = 'Создать такую же строку ниже (пустую)';
       btnDup.onclick = function(){
           var newRow = { id: 'r'+Date.now(), type: row.type, rowH: row.rowH, cells: [] };
-          for(var i=0; i<RC[row.type].cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false});
+          if(!isDiv){
+              for(var i=0; i<cfg.cells; i++) newRow.cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false, capAlways:false});
+          }
           var idx = S.rows.findIndex(function(r){return r.id===row.id;});
           S.rows.splice(idx+1, 0, newRow);
           renderGrid();
@@ -703,471 +728,491 @@ function renderGrid(){
       makeRowDraggable(rw,row.id,grip);
     }
 
-    row.cells.forEach(function(cell,ci){
-      if(ci>=cfg.cells)return;
-      var span=cfg.spans[ci]||1;
-      var div=document.createElement('div');div.className='cell '+sc(span);
-      
-      var imgUrl=gd(cell.url||'');
-      
-      var bgWrap = document.createElement('div');
-      bgWrap.style.position = 'absolute'; bgWrap.style.inset = '0';
-      
-      var bg=document.createElement('div');bg.className='cell-bg';
-      var zoomVal=cell.zoom||100;
-      var posX=cell.posX!==undefined?cell.posX:50;
-      var posY=cell.posY!==undefined?cell.posY:50;
-      bg.style.backgroundSize=zoomVal===100?'cover':zoomVal+'%';
-      bg.style.backgroundPosition=posX+'% ' + posY+'%';
-      if(cell.flipMain) bg.classList.add('flip-h');
-      
-      if(imgUrl)bg.style.backgroundImage='url('+imgUrl+')';
-      bgWrap.appendChild(bg);
-      
-      // ВРЕЗКА (INSET IMAGE) 
-      if(cell.insetUrl && !cell.isText) {
-          var insetImg = document.createElement('img');
-          insetImg.src = gdFull(cell.insetUrl); 
-          insetImg.className = 'cell-inset';
-          if(cell.flipInset) insetImg.classList.add('flip-inset');
-          bgWrap.appendChild(insetImg);
-      }
-      
-      var txtBlock = document.createElement('div');
-      txtBlock.className = 'cell-text-block';
-      txtBlock.innerHTML = (cell.textContent || '').replace(/\n/g, '<br>');
-      
-      if(cell.isText){
-          bgWrap.style.display = 'none';
-          txtBlock.style.display = 'block';
-      } else {
-          bgWrap.style.display = 'block';
-          txtBlock.style.display = 'none';
-      }
-      
-      div.appendChild(bgWrap);
-      div.appendChild(txtBlock);
-
-      if(!imgUrl&&IS_EDIT&&!cell.isText){
-        var ph=document.createElement('div');ph.className='cno';ph.textContent='Нет картинки';bgWrap.appendChild(ph);
-      }
-      
-      if(imgUrl&&!IS_EDIT){
-        var ndaImg=document.createElement('img');
-        ndaImg.src=NDA_SRC;
-        ndaImg.alt='NDA Protected';
-        ndaImg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;z-index:1;cursor:pointer';
-        bgWrap.appendChild(ndaImg);
-      }
-
-      var extras=(cell.images||[]).filter(function(x){return x&&x.url;});
-      if(extras.length>0&&cell.showFilmstrip!==false&&!IS_EDIT&&!cell.isText){
-        var fs=document.createElement('div');fs.className='filmstrip vis';
-        var allImgs=[{url:cell.url}].concat(extras);
-        var origUrl=imgUrl;
-        allImgs.forEach(function(im,ii){
-          var ft=document.createElement('img');
-          ft.className='fs-item'+(ii===0?' act':'');
-          ft.src=gd(im.url);ft.alt='';
-          ft.addEventListener('mouseenter',function(){
-            bg.style.backgroundImage='url('+gd(im.url)+')';
-            fs.querySelectorAll('.fs-item').forEach(function(x){x.classList.remove('act');});
-            ft.classList.add('act');
-          });
-          fs.appendChild(ft);
-        });
-        fs.addEventListener('mouseleave',function(){
-          bg.style.backgroundImage=origUrl?'url('+origUrl+')':'';
-          fs.querySelectorAll('.fs-item').forEach(function(x,xi){x.classList.toggle('act',xi===0);});
-        });
-        bgWrap.appendChild(fs);
-      } else if(extras.length>0&&!IS_EDIT&&!cell.isText){
-        var badge=document.createElement('div');badge.className='cnt-badge';badge.textContent='⊞ '+(extras.length+1);bgWrap.appendChild(badge);
-      }
-
-      if(cell.caption && !cell.isText){
-          var cap=document.createElement('div');
-          cap.className='ccap';
-          cap.textContent=cell.caption;
-          bgWrap.appendChild(cap);
-      }
-
-      /* ПЕЧАТНАЯ КАРТИНКА */
-      var pimg = null;
-      if(imgUrl){
-        pimg=document.createElement('img');
-        pimg.src=gdFull(imgUrl); 
-        pimg.alt='';
-        pimg.className='cell-print-img';
-        if(cell.flipMain) pimg.classList.add('flip-h');
-        bgWrap.appendChild(pimg);
-      }
-      
-      function updatePrintImg() {
-        if(!pimg) return;
-        var z = cell.zoom || 100;
-        var px = cell.posX !== undefined ? cell.posX : 50;
-        var py = cell.posY !== undefined ? cell.posY : 50;
-        pimg.style.width = z + '%';
-        pimg.style.height = z + '%';
-        pimg.style.left = ((100 - z) * (px / 100)) + '%';
-        pimg.style.top = ((100 - z) * (py / 100)) + '%';
-      }
-
-      if(IS_EDIT){
-        var swapActive=false,swapThreshold=8,swapStartX=0,swapStartY=0;
-        div.addEventListener('mousedown',function(e){
-          if(e.target.closest('.ceo')||e.target.closest('.pos-bar-wrap')||e.target.closest('.zoom-num')||e.target.closest('.cell-text-block')) return;
-          swapActive=false;swapStartX=e.clientX;swapStartY=e.clientY;
-          cellDragSrc={rowId:row.id,ci:ci};
-        });
-        div.addEventListener('mousemove',function(e){
-          if(!cellDragSrc.rowId) return;
-          if(!swapActive){
-            if(Math.abs(e.clientX-swapStartX)>swapThreshold||Math.abs(e.clientY-swapStartY)>swapThreshold){
-              swapActive=true;div.classList.add('cell-dragging');
-            }
+    if(isDiv) {
+        var dwrap = document.createElement('div');
+        dwrap.className = 'div-wrap';
+        var dline = document.createElement('div');
+        dline.className = 'div-line';
+        dwrap.appendChild(dline);
+        rw.appendChild(dwrap);
+    } else {
+        row.cells.forEach(function(cell,ci){
+          if(ci>=cfg.cells)return;
+          var span=cfg.spans[ci]||1;
+          var div=document.createElement('div');div.className='cell '+sc(span);
+          
+          var imgUrl=gd(cell.url||'');
+          
+          var bgWrap = document.createElement('div');
+          bgWrap.style.position = 'absolute'; bgWrap.style.inset = '0';
+          
+          var bg=document.createElement('div');bg.className='cell-bg';
+          var zoomVal=cell.zoom||100;
+          var posX=cell.posX!==undefined?cell.posX:50;
+          var posY=cell.posY!==undefined?cell.posY:50;
+          bg.style.backgroundSize=zoomVal===100?'cover':zoomVal+'%';
+          bg.style.backgroundPosition=posX+'% ' + posY+'%';
+          if(cell.flipMain) bg.classList.add('flip-h');
+          
+          if(imgUrl)bg.style.backgroundImage='url('+imgUrl+')';
+          bgWrap.appendChild(bg);
+          
+          // ВРЕЗКА (INSET IMAGE) 
+          if(cell.insetUrl && !cell.isText) {
+              var insetImg = document.createElement('img');
+              insetImg.src = gdFull(cell.insetUrl); 
+              insetImg.className = 'cell-inset';
+              if(cell.flipInset) insetImg.classList.add('flip-inset');
+              bgWrap.appendChild(insetImg);
           }
-        });
-        div.addEventListener('mouseup',function(){
-          div.classList.remove('cell-dragging');
-          swapActive=false;
-        });
-        div.addEventListener('mouseenter',function(){
-          if(cellDragSrc.rowId&&(cellDragSrc.rowId!==row.id||cellDragSrc.ci!==ci)){
-            div.classList.add('cell-drag-over');
+          
+          var txtBlock = document.createElement('div');
+          txtBlock.className = 'cell-text-block';
+          txtBlock.innerHTML = (cell.textContent || '').replace(/\n/g, '<br>');
+          
+          if(cell.isText){
+              bgWrap.style.display = 'none';
+              txtBlock.style.display = 'block';
+          } else {
+              bgWrap.style.display = 'block';
+              txtBlock.style.display = 'none';
           }
-        });
-        div.addEventListener('mouseleave',function(){div.classList.remove('cell-drag-over');});
-        div.addEventListener('mouseup',function(){
-          div.classList.remove('cell-drag-over');
-          if(cellDragSrc.rowId&&(cellDragSrc.rowId!==row.id||cellDragSrc.ci!==ci)){
-            var sRow=S.rows.find(function(r){return r.id===cellDragSrc.rowId;});
-            var dRow=S.rows.find(function(r){return r.id===row.id;});
-            if(sRow&&dRow&&sRow.cells[cellDragSrc.ci]&&dRow.cells[ci]){
-              var tmp=JSON.parse(JSON.stringify(sRow.cells[cellDragSrc.ci]));
-              sRow.cells[cellDragSrc.ci]=JSON.parse(JSON.stringify(dRow.cells[ci]));
-              dRow.cells[ci]=tmp;
-              renderGrid();
-            }
+          
+          div.appendChild(bgWrap);
+          div.appendChild(txtBlock);
+
+          if(!imgUrl&&IS_EDIT&&!cell.isText){
+            var ph=document.createElement('div');ph.className='cno';ph.textContent='Нет картинки';bgWrap.appendChild(ph);
           }
-          cellDragSrc={rowId:null,ci:null};
-        });
-
-        var eo=document.createElement('div');eo.className='ceo';
-        
-        var txtArea = document.createElement('textarea');
-        txtArea.className = 'cin';
-        txtArea.placeholder = 'Length 169.3 m\nTexture sets 4k + 1k\n...';
-        txtArea.style.height = '140px';
-        txtArea.style.resize = 'vertical';
-        txtArea.value = cell.textContent || '';
-        txtArea.style.display = cell.isText ? 'block' : 'none';
-        txtArea.onchange = function() { cell.textContent = this.value; renderGrid(); };
-        eo.appendChild(txtArea);
-
-        var imgControlsWrap = document.createElement('div');
-        imgControlsWrap.style.display = cell.isText ? 'none' : 'flex';
-        imgControlsWrap.style.flexDirection = 'column';
-        imgControlsWrap.style.gap = '6px';
-
-        var ui=document.createElement('input');ui.className='cin';
-        ui.placeholder='URL главной картинки...';ui.value=cell.url||'';
-        ui.onchange=function(){cell.url=this.value;renderGrid();};
-        
-        var insetUI = document.createElement('input'); insetUI.className='cin';
-        insetUI.placeholder='URL врезки (картинка в углу)...'; insetUI.value = cell.insetUrl || '';
-        insetUI.onchange=function(){cell.insetUrl=this.value;renderGrid();};
-        
-        var ci2=document.createElement('input');ci2.className='cin';
-        ci2.placeholder='Подпись снизу...';ci2.value=cell.caption||'';
-        ci2.onchange=function(){cell.caption=this.value;};
-
-        // --- ROW 1: ZOOM, X, Y, RESET ---
-        var ctrlRow1 = document.createElement('div');
-        ctrlRow1.className = 'eo-row';
-        ctrlRow1.style.justifyContent = 'space-between';
-        ctrlRow1.style.gap = '8px';
-
-        var zlbl = document.createElement('span'); zlbl.className='zoom-lbl'; zlbl.textContent='Z:';
-        var znum = document.createElement('input'); znum.type='number'; znum.className='zoom-num'; 
-        znum.min=30; znum.max=300; znum.value=cell.zoom||100;
-        
-        var xlbl = document.createElement('span'); xlbl.className='zoom-lbl'; xlbl.textContent='X:';
-        var xwrap = document.createElement('div'); xwrap.className='pos-bar-wrap'; 
-        var xthumb = document.createElement('div'); xthumb.className='pos-bar-thumb'; xwrap.appendChild(xthumb);
-
-        var ylbl = document.createElement('span'); ylbl.className='zoom-lbl'; ylbl.textContent='Y:';
-        var ywrap = document.createElement('div'); ywrap.className='pos-bar-wrap'; 
-        var ythumb = document.createElement('div'); ythumb.className='pos-bar-thumb'; ywrap.appendChild(ythumb);
-
-        var pReset = document.createElement('button');
-        pReset.className = 'pos-reset-btn';
-        pReset.textContent = '⊙';
-        pReset.title = 'Сброс позиции по центру';
-        pReset.addEventListener('mousedown', function(e){ e.stopPropagation(); });
-        pReset.onclick = function(e){ e.stopPropagation(); applyPos(50, 50); };
-
-        function applyPos(px, py){
-          if(px !== undefined) cell.posX=Math.min(100,Math.max(0,Math.round(px)));
-          if(py !== undefined) cell.posY=Math.min(100,Math.max(0,Math.round(py)));
-          var cx = cell.posX!==undefined?cell.posX:50;
-          var cy = cell.posY!==undefined?cell.posY:50;
-          xthumb.style.left=cx+'%';
-          ythumb.style.left=cy+'%';
-          bg.style.backgroundPosition=cx+'% '+cy+'%';
-          updatePrintImg();
-        }
-        applyPos(cell.posX, cell.posY);
-
-        function applyZoom(val){
-          cell.zoom=Math.min(300,Math.max(30,parseInt(val)||100));
-          znum.value=cell.zoom;
-          bg.style.backgroundSize=cell.zoom===100?'cover':cell.zoom+'%';
-          updatePrintImg();
-          if(div.updateFill) div.updateFill();
-        }
-        
-        znum.addEventListener('change',function(){applyZoom(this.value);});
-        znum.addEventListener('input',function(){applyZoom(this.value);});
-        znum.addEventListener('mousedown',function(e){e.stopPropagation();});
-        znum.addEventListener('wheel',function(e){
-          e.preventDefault();
-          applyZoom((cell.zoom||100)+(e.deltaY<0?1:-1));
-        },{passive:false});
-
-        xwrap.addEventListener('mousedown',function(e){
-          e.preventDefault();e.stopPropagation();
-          var rect=xwrap.getBoundingClientRect();
-          var startX=e.clientX,startPx=cell.posX!==undefined?cell.posX:50;
-          function onMove(ev){
-            var dx=ev.clientX-startX;
-            applyPos(startPx+(dx/rect.width*100), cell.posY);
+          
+          if(imgUrl&&!IS_EDIT){
+            var ndaImg=document.createElement('img');
+            ndaImg.src=NDA_SRC;
+            ndaImg.alt='NDA Protected';
+            ndaImg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;z-index:1;cursor:pointer';
+            bgWrap.appendChild(ndaImg);
           }
-          function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
-          document.addEventListener('mousemove',onMove);
-          document.addEventListener('mouseup',onUp);
-        });
-        xwrap.addEventListener('wheel', function(e){
-            e.preventDefault(); e.stopPropagation();
-            var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
-            applyPos((cell.posX !== undefined ? cell.posX : 50) + step, cell.posY);
-        }, {passive: false});
 
-        ywrap.addEventListener('mousedown',function(e){
-          e.preventDefault();e.stopPropagation();
-          var rect=ywrap.getBoundingClientRect();
-          var startX=e.clientX,startPy=cell.posY!==undefined?cell.posY:50;
-          function onMove(ev){
-            var dx=ev.clientX-startX;
-            applyPos(cell.posX, startPy+(dx/rect.width*100));
-          }
-          function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
-          document.addEventListener('mousemove',onMove);
-          document.addEventListener('mouseup',onUp);
-        });
-        ywrap.addEventListener('wheel', function(e){
-            e.preventDefault(); e.stopPropagation();
-            var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
-            applyPos(cell.posX, (cell.posY !== undefined ? cell.posY : 50) + step);
-        }, {passive: false});
-
-        ctrlRow1.appendChild(zlbl); ctrlRow1.appendChild(znum);
-        ctrlRow1.appendChild(xlbl); ctrlRow1.appendChild(xwrap);
-        ctrlRow1.appendChild(ylbl); ctrlRow1.appendChild(ywrap);
-        ctrlRow1.appendChild(pReset);
-
-        // --- ROW 2: EXTRAS ---
-        var ctrlRow2 = document.createElement('div');
-        ctrlRow2.className = 'eo-row';
-        ctrlRow2.style.gap = '8px';
-        
-        var fchk=document.createElement('input');fchk.type='checkbox';fchk.className='eo-check';
-        fchk.checked=cell.showFilmstrip!==false;
-        fchk.onchange=function(){cell.showFilmstrip=this.checked;};
-        var flbl=document.createElement('span');flbl.className='eo-label';flbl.textContent='Лента:';
-        
-        var addExt=document.createElement('input');addExt.className='cin';
-        addExt.placeholder='URL доп... → Enter';
-        addExt.style.flex = '1';
-        
-        ctrlRow2.appendChild(fchk);
-        ctrlRow2.appendChild(flbl);
-        ctrlRow2.appendChild(addExt);
-        
-        var extList=document.createElement('div');extList.className='extra-list';
-        function renderExtras(){
-          extList.innerHTML='';
-          var dragIdx=null;
-          (cell.images||[]).forEach(function(im,xi){
-            var it=document.createElement('div');
-            it.className='extra-item';it.setAttribute('draggable','true');it.title='Тяни чтобы переставить';
-            var ibg=document.createElement('div');ibg.className='eibg';
-            ibg.style.backgroundImage='url('+gd(im.url)+')';
-            var xb=document.createElement('button');xb.className='extra-del';xb.textContent='×';
-            (function(i){xb.onclick=function(e){e.stopPropagation();cell.images.splice(i,1);renderExtras();};})(xi);
-
-            it.addEventListener('dragstart',function(e){
-              e.stopPropagation();dragIdx=xi;
-              setTimeout(function(){it.classList.add('dragging');},0);
+          var extras=(cell.images||[]).filter(function(x){return x&&x.url;});
+          if(extras.length>0&&cell.showFilmstrip!==false&&!IS_EDIT&&!cell.isText){
+            var fs=document.createElement('div');fs.className='filmstrip vis';
+            var allImgs=[{url:cell.url}].concat(extras);
+            var origUrl=imgUrl;
+            allImgs.forEach(function(im,ii){
+              var ft=document.createElement('img');
+              ft.className='fs-item'+(ii===0?' act':'');
+              ft.src=gd(im.url);ft.alt='';
+              ft.addEventListener('mouseenter',function(){
+                bg.style.backgroundImage='url('+gd(im.url)+')';
+                fs.querySelectorAll('.fs-item').forEach(function(x){x.classList.remove('act');});
+                ft.classList.add('act');
+              });
+              fs.appendChild(ft);
             });
-            it.addEventListener('dragend',function(){
-              it.classList.remove('dragging');dragIdx=null;
-              extList.querySelectorAll('.extra-item').forEach(function(x){x.classList.remove('drag-over');});
+            fs.addEventListener('mouseleave',function(){
+              bg.style.backgroundImage=origUrl?'url('+origUrl+')':'';
+              fs.querySelectorAll('.fs-item').forEach(function(x,xi){x.classList.toggle('act',xi===0);});
             });
-            it.addEventListener('dragover',function(e){
-              e.preventDefault();e.stopPropagation();
-              extList.querySelectorAll('.extra-item').forEach(function(x){x.classList.remove('drag-over');});
-              it.classList.add('drag-over');
+            bgWrap.appendChild(fs);
+          } else if(extras.length>0&&!IS_EDIT&&!cell.isText){
+            var badge=document.createElement('div');badge.className='cnt-badge';badge.textContent='⊞ '+(extras.length+1);bgWrap.appendChild(badge);
+          }
+
+          if(cell.caption && !cell.isText){
+              var cap=document.createElement('div');
+              cap.className='ccap';
+              if(cell.capAlways) cap.classList.add('always-on');
+              cap.textContent=cell.caption;
+              bgWrap.appendChild(cap);
+          }
+
+          /* ПЕЧАТНАЯ КАРТИНКА */
+          var pimg = null;
+          if(imgUrl){
+            pimg=document.createElement('img');
+            pimg.src=gdFull(imgUrl); 
+            pimg.alt='';
+            pimg.className='cell-print-img';
+            if(cell.flipMain) pimg.classList.add('flip-h');
+            bgWrap.appendChild(pimg);
+          }
+          
+          function updatePrintImg() {
+            if(!pimg) return;
+            var z = cell.zoom || 100;
+            var px = cell.posX !== undefined ? cell.posX : 50;
+            var py = cell.posY !== undefined ? cell.posY : 50;
+            pimg.style.width = z + '%';
+            pimg.style.height = z + '%';
+            pimg.style.left = ((100 - z) * (px / 100)) + '%';
+            pimg.style.top = ((100 - z) * (py / 100)) + '%';
+          }
+
+          if(IS_EDIT){
+            var swapActive=false,swapThreshold=8,swapStartX=0,swapStartY=0;
+            div.addEventListener('mousedown',function(e){
+              if(e.target.closest('.ceo')||e.target.closest('.pos-bar-wrap')||e.target.closest('.zoom-num')||e.target.closest('.cell-text-block')||e.target.tagName.toLowerCase()==='label'||e.target.tagName.toLowerCase()==='input') return;
+              swapActive=false;swapStartX=e.clientX;swapStartY=e.clientY;
+              cellDragSrc={rowId:row.id,ci:ci};
             });
-            it.addEventListener('dragleave',function(){it.classList.remove('drag-over');});
-            it.addEventListener('drop',function(e){
-              e.preventDefault();e.stopPropagation();
-              it.classList.remove('drag-over');
-              if(dragIdx!==null&&dragIdx!==xi){
-                var tmp=cell.images[dragIdx];
-                cell.images[dragIdx]=cell.images[xi];
-                cell.images[xi]=tmp;
-                renderExtras();
+            div.addEventListener('mousemove',function(e){
+              if(!cellDragSrc.rowId) return;
+              if(!swapActive){
+                if(Math.abs(e.clientX-swapStartX)>swapThreshold||Math.abs(e.clientY-swapStartY)>swapThreshold){
+                  swapActive=true;div.classList.add('cell-dragging');
+                }
               }
-              dragIdx=null;
+            });
+            div.addEventListener('mouseup',function(){
+              div.classList.remove('cell-dragging');
+              swapActive=false;
+            });
+            div.addEventListener('mouseenter',function(){
+              if(cellDragSrc.rowId&&(cellDragSrc.rowId!==row.id||cellDragSrc.ci!==ci)){
+                div.classList.add('cell-drag-over');
+              }
+            });
+            div.addEventListener('mouseleave',function(){div.classList.remove('cell-drag-over');});
+            div.addEventListener('mouseup',function(){
+              div.classList.remove('cell-drag-over');
+              if(cellDragSrc.rowId&&(cellDragSrc.rowId!==row.id||cellDragSrc.ci!==ci)){
+                var sRow=S.rows.find(function(r){return r.id===cellDragSrc.rowId;});
+                var dRow=S.rows.find(function(r){return r.id===row.id;});
+                if(sRow&&dRow&&sRow.cells[cellDragSrc.ci]&&dRow.cells[ci]){
+                  var tmp=JSON.parse(JSON.stringify(sRow.cells[cellDragSrc.ci]));
+                  sRow.cells[cellDragSrc.ci]=JSON.parse(JSON.stringify(dRow.cells[ci]));
+                  dRow.cells[ci]=tmp;
+                  renderGrid();
+                }
+              }
+              cellDragSrc={rowId:null,ci:null};
             });
 
-            it.appendChild(ibg);it.appendChild(xb);extList.appendChild(it);
-          });
-        }
-        renderExtras();
-        addExt.onkeydown=function(e){
-          if(e.key==='Enter'&&this.value.trim()){
-            if(!cell.images)cell.images=[];
-            cell.images.push({url:this.value.trim()});this.value='';renderExtras();
-          }
-        };
+            var eo=document.createElement('div');eo.className='ceo';
+            
+            var txtArea = document.createElement('textarea');
+            txtArea.className = 'cin';
+            txtArea.placeholder = 'Length 169.3 m\nTexture sets 4k + 1k\n...';
+            txtArea.style.height = '140px';
+            txtArea.style.resize = 'vertical';
+            txtArea.value = cell.textContent || '';
+            txtArea.style.display = cell.isText ? 'block' : 'none';
+            txtArea.onchange = function() { cell.textContent = this.value; renderGrid(); };
+            eo.appendChild(txtArea);
 
-        imgControlsWrap.appendChild(ui);
-        imgControlsWrap.appendChild(insetUI);
-        imgControlsWrap.appendChild(ci2);
-        imgControlsWrap.appendChild(ctrlRow1);
-        imgControlsWrap.appendChild(ctrlRow2);
-        imgControlsWrap.appendChild(extList);
-        eo.appendChild(imgControlsWrap);
+            var imgControlsWrap = document.createElement('div');
+            imgControlsWrap.style.display = cell.isText ? 'none' : 'flex';
+            imgControlsWrap.style.flexDirection = 'column';
+            imgControlsWrap.style.gap = '6px';
 
-        // --- BOTTOM ROW ---
-        var bottomRow=document.createElement('div');
-        bottomRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px';
-        var fo=document.createElement('div');fo.className='fill-ok';
-        
-        div.updateFill = function() { checkCellFill(div, cell, fo); };
+            var ui=document.createElement('input');ui.className='cin';
+            ui.placeholder='URL главной картинки...';ui.value=cell.url||'';
+            ui.onchange=function(){cell.url=this.value;renderGrid();};
+            
+            var insetUI = document.createElement('input'); insetUI.className='cin';
+            insetUI.placeholder='URL врезки (картинка в углу)...'; insetUI.value = cell.insetUrl || '';
+            insetUI.onchange=function(){cell.insetUrl=this.value;renderGrid();};
+            
+            var capRow = document.createElement('div');
+            capRow.style.display = 'flex'; capRow.style.gap = '8px'; capRow.style.alignItems = 'center';
+            
+            var ci2=document.createElement('input');ci2.className='cin';
+            ci2.style.flex = '1';
+            ci2.placeholder='Подпись снизу...';ci2.value=cell.caption||'';
+            ci2.onchange=function(){cell.caption=this.value;};
+            
+            var capLbl = document.createElement('label');
+            capLbl.className = 'eo-label'; capLbl.style.display = 'flex'; capLbl.style.alignItems = 'center'; capLbl.style.gap = '4px';
+            var capChk = document.createElement('input');
+            capChk.type = 'checkbox'; capChk.className = 'eo-check';
+            capChk.checked = cell.capAlways === true;
+            capChk.onchange = function(){ cell.capAlways = this.checked; renderGrid(); };
+            capLbl.appendChild(capChk);
+            capLbl.appendChild(document.createTextNode('Всегда видима'));
+            
+            capRow.appendChild(ci2);
+            capRow.appendChild(capLbl);
 
-        var btnWrap=document.createElement('div');
-        btnWrap.style.display='flex';
-        btnWrap.style.flexWrap='wrap';
-        btnWrap.style.justifyContent='flex-end';
-        btnWrap.style.gap='5px';
-        
-        var btnText = document.createElement('button');
-        btnText.className = 'cdef';
-        btnText.textContent = cell.isText ? '🖼 Картинка' : '📝 Текст';
-        btnText.style.background = cell.isText ? '#00a0ff' : '';
+            // --- ROW 1: ZOOM, X, Y, RESET ---
+            var ctrlRow1 = document.createElement('div');
+            ctrlRow1.className = 'eo-row';
+            ctrlRow1.style.justifyContent = 'space-between';
+            ctrlRow1.style.gap = '8px';
 
-        var btnFlipMain = document.createElement('button');
-        btnFlipMain.className = 'cdef';
-        btnFlipMain.textContent = '◨ Фон';
-        btnFlipMain.style.background = cell.flipMain ? '#00a0ff' : '';
-        btnFlipMain.style.display = cell.isText ? 'none' : 'block';
+            var zlbl = document.createElement('span'); zlbl.className='zoom-lbl'; zlbl.textContent='Z:';
+            var znum = document.createElement('input'); znum.type='number'; znum.className='zoom-num'; 
+            znum.min=30; znum.max=300; znum.value=cell.zoom||100;
+            
+            var xlbl = document.createElement('span'); xlbl.className='zoom-lbl'; xlbl.textContent='X:';
+            var xwrap = document.createElement('div'); xwrap.className='pos-bar-wrap'; 
+            var xthumb = document.createElement('div'); xthumb.className='pos-bar-thumb'; xwrap.appendChild(xthumb);
 
-        var btnFlipInset = document.createElement('button');
-        btnFlipInset.className = 'cdef';
-        btnFlipInset.textContent = '◨ Врезка';
-        btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
-        btnFlipInset.style.display = cell.isText ? 'none' : 'block';
+            var ylbl = document.createElement('span'); ylbl.className='zoom-lbl'; ylbl.textContent='Y:';
+            var ywrap = document.createElement('div'); ywrap.className='pos-bar-wrap'; 
+            var ythumb = document.createElement('div'); ythumb.className='pos-bar-thumb'; ywrap.appendChild(ythumb);
 
-        var cdef=document.createElement('button');
-        cdef.className='cdef';
-        cdef.textContent='⟲ Сброс';
+            var pReset = document.createElement('button');
+            pReset.className = 'pos-reset-btn';
+            pReset.textContent = '⊙';
+            pReset.title = 'Сброс позиции по центру';
+            pReset.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+            pReset.onclick = function(e){ e.stopPropagation(); applyPos(50, 50); };
 
-        var clr=document.createElement('button');
-        clr.className='cclr';
-        clr.textContent='✕ Очистить';
+            function applyPos(px, py){
+              if(px !== undefined) cell.posX=Math.min(100,Math.max(0,Math.round(px)));
+              if(py !== undefined) cell.posY=Math.min(100,Math.max(0,Math.round(py)));
+              var cx = cell.posX!==undefined?cell.posX:50;
+              var cy = cell.posY!==undefined?cell.posY:50;
+              xthumb.style.left=cx+'%';
+              ythumb.style.left=cy+'%';
+              bg.style.backgroundPosition=cx+'% '+cy+'%';
+              updatePrintImg();
+            }
+            applyPos(cell.posX, cell.posY);
 
-        // Логика кнопок
-        btnText.onclick = function(e){ 
-            e.stopPropagation();
-            cell.isText = !cell.isText; 
+            function applyZoom(val){
+              cell.zoom=Math.min(300,Math.max(30,parseInt(val)||100));
+              znum.value=cell.zoom;
+              bg.style.backgroundSize=cell.zoom===100?'cover':cell.zoom+'%';
+              updatePrintImg();
+              if(div.updateFill) div.updateFill();
+            }
+            
+            znum.addEventListener('change',function(){applyZoom(this.value);});
+            znum.addEventListener('input',function(){applyZoom(this.value);});
+            znum.addEventListener('mousedown',function(e){e.stopPropagation();});
+            znum.addEventListener('wheel',function(e){
+              e.preventDefault();
+              applyZoom((cell.zoom||100)+(e.deltaY<0?1:-1));
+            },{passive:false});
+
+            xwrap.addEventListener('mousedown',function(e){
+              e.preventDefault();e.stopPropagation();
+              var rect=xwrap.getBoundingClientRect();
+              var startX=e.clientX,startPx=cell.posX!==undefined?cell.posX:50;
+              function onMove(ev){
+                var dx=ev.clientX-startX;
+                applyPos(startPx+(dx/rect.width*100), cell.posY);
+              }
+              function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
+              document.addEventListener('mousemove',onMove);
+              document.addEventListener('mouseup',onUp);
+            });
+            xwrap.addEventListener('wheel', function(e){
+                e.preventDefault(); e.stopPropagation();
+                var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
+                applyPos((cell.posX !== undefined ? cell.posX : 50) + step, cell.posY);
+            }, {passive: false});
+
+            ywrap.addEventListener('mousedown',function(e){
+              e.preventDefault();e.stopPropagation();
+              var rect=ywrap.getBoundingClientRect();
+              var startX=e.clientX,startPy=cell.posY!==undefined?cell.posY:50;
+              function onMove(ev){
+                var dx=ev.clientX-startX;
+                applyPos(cell.posX, startPy+(dx/rect.width*100));
+              }
+              function onUp(){ document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp); }
+              document.addEventListener('mousemove',onMove);
+              document.addEventListener('mouseup',onUp);
+            });
+            ywrap.addEventListener('wheel', function(e){
+                e.preventDefault(); e.stopPropagation();
+                var step = (e.deltaX !== 0 ? e.deltaX : e.deltaY) > 0 ? 2 : -2; 
+                applyPos(cell.posX, (cell.posY !== undefined ? cell.posY : 50) + step);
+            }, {passive: false});
+
+            ctrlRow1.appendChild(zlbl); ctrlRow1.appendChild(znum);
+            ctrlRow1.appendChild(xlbl); ctrlRow1.appendChild(xwrap);
+            ctrlRow1.appendChild(ylbl); ctrlRow1.appendChild(ywrap);
+            ctrlRow1.appendChild(pReset);
+
+            // --- ROW 2: EXTRAS ---
+            var ctrlRow2 = document.createElement('div');
+            ctrlRow2.className = 'eo-row';
+            ctrlRow2.style.gap = '8px';
+            
+            var flbl=document.createElement('label');
+            flbl.className='eo-label'; flbl.style.display='flex'; flbl.style.alignItems='center'; flbl.style.gap='4px';
+            var fchk=document.createElement('input');fchk.type='checkbox';fchk.className='eo-check';
+            fchk.checked=cell.showFilmstrip!==false;
+            fchk.onchange=function(){cell.showFilmstrip=this.checked;};
+            flbl.appendChild(fchk); flbl.appendChild(document.createTextNode('Лента:'));
+            
+            var addExt=document.createElement('input');addExt.className='cin';
+            addExt.placeholder='URL доп... → Enter';
+            addExt.style.flex = '1';
+            
+            ctrlRow2.appendChild(flbl);
+            ctrlRow2.appendChild(addExt);
+            
+            var extList=document.createElement('div');extList.className='extra-list';
+            function renderExtras(){
+              extList.innerHTML='';
+              var dragIdx=null;
+              (cell.images||[]).forEach(function(im,xi){
+                var it=document.createElement('div');
+                it.className='extra-item';it.setAttribute('draggable','true');it.title='Тяни чтобы переставить';
+                var ibg=document.createElement('div');ibg.className='eibg';
+                ibg.style.backgroundImage='url('+gd(im.url)+')';
+                var xb=document.createElement('button');xb.className='extra-del';xb.textContent='×';
+                (function(i){xb.onclick=function(e){e.stopPropagation();cell.images.splice(i,1);renderExtras();};})(xi);
+
+                it.addEventListener('dragstart',function(e){
+                  e.stopPropagation();dragIdx=xi;
+                  setTimeout(function(){it.classList.add('dragging');},0);
+                });
+                it.addEventListener('dragend',function(){
+                  it.classList.remove('dragging');dragIdx=null;
+                  extList.querySelectorAll('.extra-item').forEach(function(x){x.classList.remove('drag-over');});
+                });
+                it.addEventListener('dragover',function(e){
+                  e.preventDefault();e.stopPropagation();
+                  extList.querySelectorAll('.extra-item').forEach(function(x){x.classList.remove('drag-over');});
+                  it.classList.add('drag-over');
+                });
+                it.addEventListener('dragleave',function(){it.classList.remove('drag-over');});
+                it.addEventListener('drop',function(e){
+                  e.preventDefault();e.stopPropagation();
+                  it.classList.remove('drag-over');
+                  if(dragIdx!==null&&dragIdx!==xi){
+                    var tmp=cell.images[dragIdx];
+                    cell.images[dragIdx]=cell.images[xi];
+                    cell.images[xi]=tmp;
+                    renderExtras();
+                  }
+                  dragIdx=null;
+                });
+
+                it.appendChild(ibg);it.appendChild(xb);extList.appendChild(it);
+              });
+            }
+            renderExtras();
+            addExt.onkeydown=function(e){
+              if(e.key==='Enter'&&this.value.trim()){
+                if(!cell.images)cell.images=[];
+                cell.images.push({url:this.value.trim()});this.value='';renderExtras();
+              }
+            };
+
+            imgControlsWrap.appendChild(ui);
+            imgControlsWrap.appendChild(insetUI);
+            imgControlsWrap.appendChild(capRow);
+            imgControlsWrap.appendChild(ctrlRow1);
+            imgControlsWrap.appendChild(ctrlRow2);
+            imgControlsWrap.appendChild(extList);
+            eo.appendChild(imgControlsWrap);
+
+            // --- BOTTOM ROW ---
+            var bottomRow=document.createElement('div');
+            bottomRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px';
+            var fo=document.createElement('div');fo.className='fill-ok';
+            
+            div.updateFill = function() { checkCellFill(div, cell, fo); };
+
+            var btnWrap=document.createElement('div');
+            btnWrap.style.display='flex';
+            btnWrap.style.flexWrap='wrap';
+            btnWrap.style.justifyContent='flex-end';
+            btnWrap.style.gap='5px';
+            
+            var btnText = document.createElement('button');
+            btnText.className = 'cdef';
             btnText.textContent = cell.isText ? '🖼 Картинка' : '📝 Текст';
             btnText.style.background = cell.isText ? '#00a0ff' : '';
-            
-            if(cell.isText) {
-                imgControlsWrap.style.display = 'none';
-                txtArea.style.display = 'block';
-                btnFlipMain.style.display = 'none';
-                btnFlipInset.style.display = 'none';
-                bgWrap.style.display = 'none';
-                txtBlock.style.display = 'block';
-            } else {
-                imgControlsWrap.style.display = 'flex';
-                txtArea.style.display = 'none';
-                btnFlipMain.style.display = 'block';
-                btnFlipInset.style.display = 'block';
-                bgWrap.style.display = 'block';
-                txtBlock.style.display = 'none';
-            }
-            if(div.updateFill) div.updateFill();
-        };
 
-        btnFlipMain.onclick = function(e) {
-            e.stopPropagation();
-            cell.flipMain = !cell.flipMain;
+            var btnFlipMain = document.createElement('button');
+            btnFlipMain.className = 'cdef';
+            btnFlipMain.textContent = '◨ Фон';
             btnFlipMain.style.background = cell.flipMain ? '#00a0ff' : '';
-            if(cell.flipMain) bg.classList.add('flip-h'); else bg.classList.remove('flip-h');
-            updatePrintImg();
-        };
+            btnFlipMain.style.display = cell.isText ? 'none' : 'block';
 
-        btnFlipInset.onclick = function(e) {
-            e.stopPropagation();
-            cell.flipInset = !cell.flipInset;
+            var btnFlipInset = document.createElement('button');
+            btnFlipInset.className = 'cdef';
+            btnFlipInset.textContent = '◨ Врезка';
             btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
-            var inImg = bgWrap.querySelector('.cell-inset');
-            if(inImg) {
-                if(cell.flipInset) inImg.classList.add('flip-inset'); else inImg.classList.remove('flip-inset');
-            }
-        };
+            btnFlipInset.style.display = cell.isText ? 'none' : 'block';
 
-        cdef.onclick=function(e){ e.stopPropagation(); applyZoom(100); applyPos(50, 50); cell.flipMain=false; cell.flipInset=false; renderGrid(); };
-        clr.onclick=function(e){ e.stopPropagation(); cell.url=''; cell.caption=''; cell.images=[]; cell.textContent=''; cell.insetUrl=''; cell.zoom=100; cell.posX=50; cell.posY=50; cell.flipMain=false; cell.flipInset=false; renderGrid(); };
+            var clr=document.createElement('button');
+            clr.className='cclr';
+            clr.textContent='✕ Очистить';
 
-        btnWrap.appendChild(btnText);
-        btnWrap.appendChild(btnFlipMain);
-        btnWrap.appendChild(btnFlipInset);
-        btnWrap.appendChild(cdef);
-        btnWrap.appendChild(clr);
-        
-        bottomRow.appendChild(fo);
-        bottomRow.appendChild(btnWrap);
-        eo.appendChild(bottomRow);
-        
-        div.appendChild(eo);
-      }
+            // Логика кнопок
+            btnText.onclick = function(e){ 
+                e.stopPropagation();
+                cell.isText = !cell.isText; 
+                btnText.textContent = cell.isText ? '🖼 Картинка' : '📝 Текст';
+                btnText.style.background = cell.isText ? '#00a0ff' : '';
+                
+                if(cell.isText) {
+                    imgControlsWrap.style.display = 'none';
+                    txtArea.style.display = 'block';
+                    btnFlipMain.style.display = 'none';
+                    btnFlipInset.style.display = 'none';
+                    bgWrap.style.display = 'none';
+                    txtBlock.style.display = 'block';
+                } else {
+                    imgControlsWrap.style.display = 'flex';
+                    txtArea.style.display = 'none';
+                    btnFlipMain.style.display = 'block';
+                    btnFlipInset.style.display = 'block';
+                    bgWrap.style.display = 'block';
+                    txtBlock.style.display = 'none';
+                }
+                if(div.updateFill) div.updateFill();
+            };
 
-      var lbIdx=lbItems.length;
-      lbItems.push({cell:cell,imgUrl:imgUrl});
-      if(!IS_EDIT&&imgUrl&&!cell.isText){
-        (function(idx){div.onclick=function(){openLB(idx);};})(lbIdx);
-      }
+            btnFlipMain.onclick = function(e) {
+                e.stopPropagation();
+                cell.flipMain = !cell.flipMain;
+                btnFlipMain.style.background = cell.flipMain ? '#00a0ff' : '';
+                if(cell.flipMain) bg.classList.add('flip-h'); else bg.classList.remove('flip-h');
+                updatePrintImg();
+            };
 
-      rg.appendChild(div);
-      updatePrintImg(); 
-      if(IS_EDIT){
-          setTimeout(function(){ if(div.updateFill) div.updateFill(); }, 50);
-      }
-    });
+            btnFlipInset.onclick = function(e) {
+                e.stopPropagation();
+                cell.flipInset = !cell.flipInset;
+                btnFlipInset.style.background = cell.flipInset ? '#00a0ff' : '';
+                var inImg = bgWrap.querySelector('.cell-inset');
+                if(inImg) {
+                    if(cell.flipInset) inImg.classList.add('flip-inset'); else inImg.classList.remove('flip-inset');
+                }
+            };
 
-    rw.appendChild(rg);
+            clr.onclick=function(e){ e.stopPropagation(); cell.url=''; cell.caption=''; cell.images=[]; cell.textContent=''; cell.insetUrl=''; cell.zoom=100; cell.posX=50; cell.posY=50; cell.flipMain=false; cell.flipInset=false; cell.capAlways=false; renderGrid(); };
+
+            btnWrap.appendChild(btnText);
+            btnWrap.appendChild(btnFlipMain);
+            btnWrap.appendChild(btnFlipInset);
+            btnWrap.appendChild(clr);
+            
+            bottomRow.appendChild(fo);
+            bottomRow.appendChild(btnWrap);
+            eo.appendChild(bottomRow);
+            
+            div.appendChild(eo);
+          }
+
+          var lbIdx=lbItems.length;
+          lbItems.push({cell:cell,imgUrl:imgUrl});
+          if(!IS_EDIT&&imgUrl&&!cell.isText){
+            (function(idx){div.onclick=function(){openLB(idx);};})(lbIdx);
+          }
+
+          rg.appendChild(div);
+          updatePrintImg(); 
+          if(IS_EDIT){
+              setTimeout(function(){ if(div.updateFill) div.updateFill(); }, 50);
+          }
+        });
+        rw.appendChild(rg);
+    }
 
     var rh=document.createElement('div');rh.className='resize-handle';
     var rb=document.createElement('div');rb.className='resize-bar';
     rh.appendChild(rb);rw.appendChild(rh);
-    if(IS_EDIT)makeResizable(rh,row,rg,rw);
+    if(IS_EDIT)makeResizable(rh,row,rw,rg);
 
     wrap.appendChild(rw);
   });
@@ -1323,8 +1368,9 @@ function dlPDF(){
 function addRow(type){
   var cfg=RC[type];if(!cfg)return;
   var cells=[];
-  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false});
-  S.rows.push({id:'r'+Date.now(),type:type,rowH:300,cells:cells});
+  for(var i=0;i<cfg.cells;i++)cells.push({url:'',caption:'',showFilmstrip:true,images:[], isText:false, textContent:'', insetUrl:'', flipMain:false, flipInset:false, capAlways:false});
+  var defH = cfg.isDivider ? 60 : 300;
+  S.rows.push({id:'r'+Date.now(),type:type,rowH:defH,cells:cells});
   renderGrid();
   setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},50);
 }
