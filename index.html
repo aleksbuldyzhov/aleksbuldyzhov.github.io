@@ -449,9 +449,19 @@ var BIN_ID   = '6a8aa9a6f5f4af5e2937c326';
 /* Только ключ на ЧТЕНИЕ (JSONBin → API Keys → Access Key с одним правом Read).
    Пусто = бин публичный и читается без ключа. Master Key сюда НЕ вставлять. */
 var READ_KEY = '$2a$10$AsWn5e/WrU36jauvF2FrIeUFyXGvWV4InOQXm2rPYsXhVr3JUUntq';
-/* Редактор: открыть сайт с ?edit. Ключ на запись спрашивается в браузере
+/* Редактор открывается по секретной ссылке ?a=<токен>. В коде лежит только SHA-256 токена,
+   сам токен из кода не узнать. Ключ на запись спрашивается в браузере
    и хранится только в sessionStorage до закрытия вкладки. */
-var IS_EDIT  = new URLSearchParams(location.search).has('edit');
+var EDIT_HASH = 'a7c523ef1fc42343e3b322293dccd1111c4813a0ae02065341081d1546e8ace3';
+var IS_EDIT  = false;
+function checkEditToken(){
+  var t=new URLSearchParams(location.search).get('a');
+  if(!t||!window.crypto||!crypto.subtle||!window.TextEncoder) return Promise.resolve(false);
+  return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){
+    var hex=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2);}).join('');
+    return hex===EDIT_HASH;
+  }).catch(function(){return false;});
+}
 var CACHE_KEY = 'ab_cache';
 try{localStorage.removeItem('mf_cache');}catch(e){}
 
@@ -1548,7 +1558,8 @@ function exitEdit(){
 }
 
 /* INIT */
-(function(){
+checkEditToken().then(function(ok){
+  IS_EDIT=ok;
   try{var c=localStorage.getItem(CACHE_KEY);if(c){S=JSON.parse(c);renderHeader();renderGrid(); initGA();}}catch(e){}
   apiLoad().then(function(){
     document.getElementById('loading').style.display='none';
@@ -1560,7 +1571,7 @@ function exitEdit(){
       fillEditor();
     }
   });
-})();
+});
 </script>
 </body>
 </html>
